@@ -4,6 +4,13 @@
     "firstRun": "off"
   },
   "doctor": {
-    "failOnBuild": false
+    "failOnBuild": false,
+    "dbToolScopingDenylist": {
+      "court_exhibits": "Child rows of court_cases; every action reaches them only through a case id checked with assertAccess on court_cases.",
+      "court_arguments": "Child rows of court_cases; every action reaches them only through a case id checked with assertAccess on court_cases.",
+      "court_objections": "Child rows of court_cases; every action reaches them only through a case id checked with assertAccess on court_cases.",
+      "court_questions": "Child rows of court_cases; every action reaches them only through a case id checked with assertAccess on court_cases.",
+      "court_transcript": "Child rows of court_cases; every action reaches them only through a case id checked with assertAccess on court_cases."
+    }
   }
 }

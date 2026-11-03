@@ -1,0 +1,258 @@
+import { IconCheck, IconX } from "@tabler/icons-react";
+import { motion } from "motion/react";
+import type { ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
+import {
+  SCHEDULE,
+  SIDE_LABEL,
+  type Side,
+} from "@shared/court";
+
+/** The Objection! wordmark: a heavy grotesque with a brass serif bang. */
+export function Wordmark({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "font-display inline-flex items-baseline font-extrabold leading-none tracking-tight text-foreground",
+        className,
+      )}
+      aria-label="Objection!"
+    >
+      <span aria-hidden="true">objection</span>
+      <span aria-hidden="true" className="font-serif font-normal italic text-brass">
+        !
+      </span>
+    </span>
+  );
+}
+
+export function Eyebrow({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      className={cn(
+        "font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground",
+        className,
+      )}
+    >
+      {children}
+    </span>
+  );
+}
+
+const SIDE_STYLES: Record<Side, { ring: string; text: string; bg: string }> = {
+  defense: {
+    ring: "ring-defense/40",
+    text: "text-defense",
+    bg: "bg-defense-deep",
+  },
+  prosecution: {
+    ring: "ring-prosecution/40",
+    text: "text-prosecution",
+    bg: "bg-prosecution-deep",
+  },
+};
+
+export function sideText(side: Side) {
+  return SIDE_STYLES[side].text;
+}
+
+/** Monogram seal for a counsel bench. */
+export function CounselSeal({
+  side,
+  size = "md",
+}: {
+  side: Side;
+  size?: "sm" | "md" | "lg";
+}) {
+  const s = SIDE_STYLES[side];
+  const dims =
+    size === "lg" ? "size-14 text-3xl" : size === "sm" ? "size-7 text-base" : "size-10 text-2xl";
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "inline-flex shrink-0 items-center justify-center rounded-full font-serif italic ring-1",
+        dims,
+        s.bg,
+        s.text,
+        s.ring,
+      )}
+    >
+      {side === "defense" ? "D" : "P"}
+    </span>
+  );
+}
+
+export function SideLabel({ side, className }: { side: Side; className?: string }) {
+  return (
+    <span
+      className={cn(
+        "font-mono text-[11px] font-medium uppercase tracking-[0.16em]",
+        sideText(side),
+        className,
+      )}
+    >
+      {SIDE_LABEL[side]}
+    </span>
+  );
+}
+
+/** A verified citation chip: the exhibit letter plus a check or a cross. */
+export function CitationChip({
+  exhibit,
+  verified,
+  onClick,
+}: {
+  exhibit: string;
+  verified: boolean;
+  onClick?: () => void;
+}) {
+  const content = (
+    <>
+      <span>Exhibit {exhibit}</span>
+      {verified ? (
+        <IconCheck className="size-3.5 text-verified-ink" strokeWidth={2.6} aria-label="verified" />
+      ) : (
+        <IconX className="size-3.5 text-failed-ink" strokeWidth={2.6} aria-label="not found in exhibit" />
+      )}
+    </>
+  );
+  const cls = cn(
+    "inline-flex min-h-7 items-center gap-1.5 rounded-md px-2 font-mono text-[11px] font-medium",
+    verified
+      ? "bg-paper text-paper-ink"
+      : "bg-paper-dim text-paper-ink line-through decoration-failed-ink decoration-2",
+  );
+  if (!onClick) return <span className={cls}>{content}</span>;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(cls, "transition-transform hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass")}
+    >
+      {content}
+    </button>
+  );
+}
+
+/** Weight of argument as a two-colour bar with a sliding seam. */
+export function WeightBar({
+  defensePct,
+  compact = false,
+  caption = true,
+}: {
+  defensePct: number;
+  compact?: boolean;
+  caption?: boolean;
+}) {
+  const prosecutionPct = 100 - defensePct;
+  return (
+    <div className="flex flex-col gap-2">
+      {!compact && (
+        <div className="flex items-baseline justify-between gap-3">
+          <Eyebrow>Weight of argument</Eyebrow>
+          {caption && (
+            <span className="text-xs text-muted-foreground">Scored by rule from standing, verified arguments</span>
+          )}
+        </div>
+      )}
+      <div
+        className={cn(
+          "relative flex overflow-hidden rounded-full bg-bench-raised",
+          compact ? "h-1.5" : "h-3",
+        )}
+        role="img"
+        aria-label={`Defense ${defensePct} percent, Prosecution ${prosecutionPct} percent`}
+      >
+        <motion.div
+          className="h-full bg-defense"
+          initial={false}
+          animate={{ width: `${defensePct}%` }}
+          transition={{ type: "spring", stiffness: 120, damping: 20 }}
+        />
+        <div className="h-full w-0.5 bg-ink" />
+        <div className="h-full flex-1 bg-prosecution" />
+      </div>
+      {!compact && (
+        <div className="flex justify-between text-sm font-medium tabular-nums">
+          <span className="text-defense">Defense {defensePct}%</span>
+          <span className="text-prosecution">Prosecution {prosecutionPct}%</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Six-step trial progress: opening, rebuttal, closing for each side. */
+export function TrialProgress({ turn }: { turn: number }) {
+  return (
+    <ol className="flex items-center gap-1" aria-label={`Turn ${Math.min(turn + 1, 6)} of 6`}>
+      {SCHEDULE.map((slot, i) => {
+        const done = i < turn;
+        const current = i === turn;
+        return (
+          <li key={i} className="flex flex-col items-center gap-1">
+            <span
+              className={cn(
+                "h-1.5 w-7 rounded-full transition-colors",
+                done
+                  ? slot.side === "defense"
+                    ? "bg-defense"
+                    : "bg-prosecution"
+                  : current
+                    ? "bg-brass"
+                    : "bg-line-strong",
+              )}
+            />
+            {i % 2 === 0 && (
+              <span className="sr-only">{slot.stage}</span>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+export function statusLabel(status: string): string {
+  switch (status) {
+    case "filed":
+      return "Filed";
+    case "in_session":
+      return "In session";
+    case "deliberation":
+      return "Awaiting ruling";
+    case "ruled":
+      return "Ruled";
+    default:
+      return status;
+  }
+}
+
+export function StatusChip({ status, paused = false }: { status: string; paused?: boolean }) {
+  const label = paused ? "Court paused" : statusLabel(status);
+  const tone = paused
+    ? "border-brass/60 text-brass-strong bg-brass-deep"
+    : status === "ruled"
+      ? "border-line-strong text-foreground"
+      : status === "deliberation"
+        ? "border-brass/50 text-brass-strong"
+        : "border-line-strong text-muted-foreground";
+  return (
+    <span
+      className={cn(
+        "inline-flex h-8 items-center rounded-full border px-3 text-xs font-medium",
+        tone,
+      )}
+    >
+      {label}
+    </span>
+  );
+}

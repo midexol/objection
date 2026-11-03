@@ -31,3 +31,23 @@ Use `adding-a-feature` for functional parity and `frontend-design` for a user-fa
 Before building common workspace or agent UI, read `agent-native-toolkit`; for supported customization, read `customizing-agent-native`.
 
 - Guarded verification: run `pnpm agent-native:doctor`; fix findings before done.
+
+## Objection! — the court
+
+This app puts decisions on trial. The docket is `/court`; a case's courtroom is `/court/<caseId>`; its decision record is `/court/<caseId>/record`. `navigation` reports `view` (`docket`, `file-case`, `courtroom`, `record`) and `caseId`.
+
+A case has a yes/no motion, lettered exhibits (the evidence board), six counsel turns (Defense then Prosecution: opening, rebuttal, closing), objections, questions from the judge, a transcript and a verdict. The person is the judge. The in-app agent is the Clerk.
+
+| Action | Purpose |
+| --- | --- |
+| `list-cases` / `get-case` | Read the docket or one full case file |
+| `file-case` | File a motion with optional exhibits |
+| `open-sample-case` | Fresh rehearsed sample trial (no model key needed) |
+| `add-exhibit` / `update-exhibit` | Enter evidence (agents need the judge's approval) / strike or reinstate |
+| `advance-trial` | Call the next counsel; the court engine writes one statement |
+| `submit-argument` | Argue as counsel yourself; quotes are verified in code |
+| `cross-examine` | Put a question to counsel |
+| `rule-objection` / `deliver-verdict` | Judge only; agents need approval |
+| `export-record` | Decision record as Markdown (ADR) |
+
+Rules: every citation is checked against exhibit text by `server/lib/court/verify.ts`; a failed quote creates an automatic objection and the court pauses (`objection_pending`) until the judge rules. `advance-trial` is the one action that calls a model (the court engine in `server/lib/court/counsel.ts`, free-tier Groq/Gemini/OpenRouter keys from the environment); everything it produces still goes through `recordArgument`, the same path as `submit-argument`.

@@ -18,6 +18,7 @@ export interface NavigationState {
   path?: string;
   publicPath?: string;
   threadId?: string;
+  caseId?: string;
 }
 
 export function useNavigationState() {
@@ -64,17 +65,22 @@ function matchesPathPrefix(pathname: string, prefix: string): boolean {
 
 export function navigationStateForPath(pathname: string): NavigationState {
   const threadId = threadIdFromPath(pathname);
+  const caseMatch = pathname.match(/^\/court\/(case_[a-z0-9]+)/);
   return {
     view: viewForPath(pathname),
     path: pathname,
     publicPath: appPathFromLocalRoute(pathname),
     ...(threadId ? { threadId } : {}),
+    ...(caseMatch ? { caseId: caseMatch[1] } : {}),
   };
 }
 
 function viewForPath(pathname: string): string {
   if (isChatPathname(pathname)) return "chat";
-  if (pathname === HOME_PATH) return "home";
+  if (/^\/court\/case_[a-z0-9]+\/record/.test(pathname)) return "record";
+  if (/^\/court\/case_[a-z0-9]+/.test(pathname)) return "courtroom";
+  if (pathname === "/court/new") return "file-case";
+  if (pathname === HOME_PATH) return "docket";
   if (pathname.startsWith("/database")) return "database";
   if (pathname.startsWith("/extensions")) return "extensions";
   if (pathname.startsWith("/observability")) return "observability";
@@ -92,7 +98,10 @@ function pathForView(view?: string): string {
     case "ask":
       return NEW_CHAT_PATH;
     case "home":
+    case "docket":
       return HOME_PATH;
+    case "file-case":
+      return "/court/new";
     case "database":
       return "/database";
     case "extensions":
