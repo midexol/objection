@@ -4,6 +4,8 @@
 @import "@fontsource-variable/bricolage-grotesque";
 @import "@fontsource/instrument-serif/400.css";
 @import "@fontsource/instrument-serif/400-italic.css";
+@import "@fontsource-variable/bodoni-moda/opsz.css";
+@import "@fontsource-variable/bodoni-moda/opsz-italic.css";
 
 @import "tailwindcss";
 @import "@agent-native/toolkit/styles.css";
@@ -293,6 +295,7 @@
   --font-sans: "Google Sans Flex Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Bricolage Grotesque Variable", "Google Sans Flex Variable", ui-sans-serif, sans-serif;
   --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-didone: "Bodoni Moda Variable", "Bodoni 72", Didot, ui-serif, serif;
   --font-mono: "Google Sans Code Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-ink: hsl(36 19% 5%);
@@ -409,4 +412,34 @@
   .exhibit-cited {
     animation: none;
   }
+}
+
+/* ───────────── Landing film ───────────── */
+.film-ink { background: hsl(30 10% 2%); }
+.font-didone { font-family: var(--font-didone); font-optical-sizing: auto; }
+.film-plate {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  will-change: transform, opacity;
+}
+.film-vignette {
+  background:
+    radial-gradient(120% 80% at 50% 40%, transparent 30%, hsl(30 10% 2% / 0.85) 100%),
+    linear-gradient(180deg, hsl(30 10% 2% / 0.55), transparent 25%, transparent 60%, hsl(30 10% 2%) 100%);
+}
+.film-felt {
+  background:
+    radial-gradient(70% 60% at 50% 35%, hsl(40 30% 14% / 0.9), transparent 70%),
+    repeating-linear-gradient(0deg, hsl(38 18% 9%) 0 2px, hsl(38 18% 8%) 2px 4px);
+}
+.film-hud-line { stroke: hsl(43 78% 73% / 0.65); stroke-width: 1.2; fill: none; }
+.film-ring { fill: none; stroke: hsl(43 78% 73% / 0.8); stroke-width: 1.4; filter: drop-shadow(0 0 8px hsl(43 78% 73% / 0.7)); }
+.film-glass {
+  background: hsl(30 10% 6% / 0.62);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border: 1px solid hsl(40 46% 91% / 0.12);
+}
+.film-stamp {
+  border: 3px double currentColor; letter-spacing: 0.18em; text-transform: uppercase;
+  mix-blend-mode: multiply;
 }
