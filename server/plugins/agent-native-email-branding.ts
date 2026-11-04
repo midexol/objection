@@ -11,4 +11,8 @@ export default defineAppConfig({
     // Optional: use your own absolute HTTPS logo URL in transactional emails.
     // logoUrl: "https://example.com/logo.png",
   },
+  // No outbound email service is configured, so a verification email could
+  // never arrive. Signup accepts the address as given; each user still sees
+  // only their own cases.
+  auth: { requireEmailVerification: false },
 });
