@@ -27,7 +27,7 @@ pnpm install
 pnpm dev
 ```
 
-Open the docket and choose **Watch a sample trial**. The rehearsed sample needs no API key.
+Open the landing page and choose **Watch a sample trial**. No sign-up: visitors enter as a guest (`app/routes/guest.tsx` creates a private throwaway account), and the rehearsed sample needs no API key.
 
 For live counsel on your own cases, set one free key in `.env`:
 

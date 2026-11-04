@@ -168,7 +168,7 @@ function AppContent() {
           <ThemeToggleItem />
         </CommandMenu.Group>
       </CommandMenu>
-      {location.pathname === "/" ? (
+      {isBareShell(location.pathname) ? (
         <Outlet />
       ) : (
         <AppLayout>
@@ -177,6 +177,11 @@ function AppContent() {
       )}
     </>
   );
+}
+
+/** The landing page and guest entry render without the app shell, signed out. */
+function isBareShell(pathname: string) {
+  return pathname === "/" || pathname === "/guest";
 }
 
 export default function Root() {
@@ -189,7 +194,7 @@ export default function Root() {
       <AppProviders
         queryClient={queryClient}
         skeletonLayout={skeletonLayoutForPath(pathname)}
-        isPublicPath={pathname === "/"}
+        isPublicPath={isBareShell(pathname)}
         i18n={{ catalog: i18nCatalog }}
       >
         <DbSyncSetup />

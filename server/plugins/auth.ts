@@ -91,7 +91,8 @@ const injectStyles = `<script>(function(){var s=document.createElement("style");
 ).replace(/</g, "\\u003c")};document.head.appendChild(s);var c=document.currentScript;if(c)c.remove();})();</script>`;
 
 export default createToolkitAuthPlugin({
-  workspaceAppPublicPaths: ["/"],
+  publicPaths: ["/guest"],
+  workspaceAppPublicPaths: ["/", "/guest"],
   rootAuth: false,
   marketing: false,
   renderSignInPage: (props) => injectStyles + renderAuthPage(props),

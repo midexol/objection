@@ -23,11 +23,14 @@ export function meta() {
 
 const REPO = "https://github.com/midexol/objection";
 
-/** Straight in when signed in, through sign-in otherwise. */
+/** Straight in when signed in; signed-out visitors enter as a guest, no form. */
 function useEnter() {
   const { session } = useSession() as { session?: { email?: string } | null };
   const signedIn = !!session?.email;
-  return (path: string) => (signedIn ? path : `/sign-in?return=${encodeURIComponent(path)}`);
+  return {
+    signedIn,
+    enter: (path: string) => (signedIn ? path : `/guest?to=${encodeURIComponent(path)}`),
+  };
 }
 
 const pillIvory =
@@ -38,7 +41,7 @@ const pillGhost =
   "inline-flex min-h-14 items-center justify-center rounded-full border border-foreground/20 px-8 text-base font-semibold text-foreground transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass";
 
 export default function LandingRoute() {
-  const enter = useEnter();
+  const { enter, signedIn } = useEnter();
   const scroller = useRef<HTMLDivElement>(null);
 
   return (
@@ -47,9 +50,19 @@ export default function LandingRoute() {
         <span className="rounded-full border border-line bg-bench/80 px-4 py-2 backdrop-blur">
           <Wordmark className="text-[22px]" />
         </span>
-        <a href={enter("/court")} className={pillIvory}>
-          Enter the court
-        </a>
+        <div className="flex items-center gap-2 sm:gap-4">
+          {!signedIn && (
+            <a
+              href="/sign-in?return=%2Fcourt"
+              className="hidden min-h-12 items-center rounded-full px-3 text-[15px] font-semibold text-foreground/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass sm:inline-flex"
+            >
+              Sign in
+            </a>
+          )}
+          <a href={enter("/court")} className={pillIvory}>
+            Enter the court
+          </a>
+        </div>
       </header>
 
       <Film scroller={scroller} enterHref={enter("/court/new")} sampleHref={enter("/court?sample=1")} />
@@ -75,7 +88,7 @@ export default function LandingRoute() {
             <span className="font-serif font-normal italic text-defense">deserves a cross-examination.</span>
           </h2>
           <p className="max-w-[520px] text-[17px] leading-relaxed text-foreground/80">
-            File a motion, enter your evidence, and watch both sides argue it. The sample trial runs without any API key.
+            File a motion, enter your evidence, and watch both sides argue it. No sign-up needed: you enter as a guest, and the sample trial runs without any API key.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a href={enter("/court/new")} className={pillGold}>
