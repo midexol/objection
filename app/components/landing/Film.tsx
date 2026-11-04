@@ -790,16 +790,16 @@ function RulingBeat({ p }: { p: number }) {
           return (
             <div
               key={r.stamp}
-              className="exhibit-paper absolute left-1/2 top-1/2 w-[min(64vw,270px)] rounded-xl p-5"
+              className="exhibit-paper absolute left-1/2 top-1/2 w-[min(72vw,270px)] rounded-xl p-4 sm:p-5"
               style={{
                 opacity: t,
-                transform: `translate(calc(-50% + ${(i - 1) * spread * t}px), calc(-50% + ${(1 - t) * 80 + (i - 1) * (spread === 0 ? 74 : 18)}px)) rotate(${r.rot * t * (spread === 0 ? 0.4 : 1)}deg)`,
+                transform: `translate(calc(-50% + ${(i - 1) * spread * t}px), calc(-50% + ${(1 - t) * 80 + (i - 1) * (spread === 0 ? 100 : 18)}px)) rotate(${r.rot * t * (spread === 0 ? 0.4 : 1)}deg)`,
                 zIndex: i,
               }}
             >
               <span className="font-mono text-[9.5px] tracking-[0.18em] text-paper-muted">OBJECTION! COURT, CASE 74AFF7</span>
-              <p className="mt-2 font-serif text-[24px] leading-tight">{r.title}</p>
-              <p className="mt-1.5 text-[13px] leading-snug text-paper-muted">{r.body}</p>
+              <p className="mt-2 font-serif text-[21px] leading-tight sm:text-[24px]">{r.title}</p>
+              <p className="mt-1.5 hidden text-[13px] leading-snug text-paper-muted sm:block">{r.body}</p>
               <span
                 className={cn("film-stamp absolute -right-3 -top-4 rounded px-2.5 py-1 font-mono text-[12px] font-bold", r.tone)}
                 style={{ opacity: stamp, transform: `rotate(${8 - i * 5}deg) scale(${lerp(1.8, 1, stamp)})` }}

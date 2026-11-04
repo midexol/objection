@@ -176,7 +176,7 @@ function Courtroom({ file }: { file: CaseFile }) {
 
   return (
     <div className="court-spotlight court-grain min-h-full">
-      <header className="sticky top-0 z-20 border-b border-line bg-ink/85 backdrop-blur-xl">
+      <header className="z-20 border-b border-line bg-ink/85 backdrop-blur-xl md:sticky md:top-0">
         <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-x-6 gap-y-4 px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 flex-1 basis-[520px] items-start gap-3">
             <Link

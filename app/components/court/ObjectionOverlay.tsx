@@ -32,7 +32,7 @@ export function ObjectionOverlay({
     if (objection && shownFor.current !== objection.id) {
       shownFor.current = objection.id;
       if (sound) strikeGavel(1);
-      window.setTimeout(() => sustainRef.current?.focus(), 650);
+      window.setTimeout(() => sustainRef.current?.focus({ preventScroll: true }), 650);
     }
   }, [objection, sound]);
 
@@ -69,7 +69,7 @@ export function ObjectionOverlay({
             initial={{ scale: 1.08, y: 10 }}
             animate={{ scale: 1, y: 0, x: [0, -10, 9, -6, 4, 0] }}
             transition={{ duration: 0.5, ease: "easeOut", x: { delay: 0.18, duration: 0.42 } }}
-            className="court-grain relative flex w-full max-w-[780px] flex-col gap-6 overflow-hidden rounded-[28px] border-2 border-stamp/50 bg-bench p-7 shadow-[0_40px_120px_-30px_hsl(var(--primary)/0.45)] sm:p-10"
+            className="court-grain relative flex max-h-[calc(100svh-2rem)] w-full max-w-[780px] flex-col gap-4 overflow-y-auto overscroll-contain rounded-[28px] border-2 border-stamp/50 bg-bench p-5 sm:gap-6 shadow-[0_40px_120px_-30px_hsl(var(--primary)/0.45)] sm:p-10"
           >
             <div className="brass-edge absolute inset-x-0 top-0 h-px" />
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -80,7 +80,7 @@ export function ObjectionOverlay({
                   {objection.origin === "court" ? ", on the court's citation check" : ""}
                 </Eyebrow>
               </span>
-              <Eyebrow>Both counsel paused</Eyebrow>
+              <Eyebrow className="hidden sm:inline">Both counsel paused</Eyebrow>
             </div>
 
             <motion.h2
@@ -88,36 +88,36 @@ export function ObjectionOverlay({
               initial={{ scale: 2.4, opacity: 0, rotate: -6 }}
               animate={{ scale: 1, opacity: 1, rotate: -2 }}
               transition={{ type: "spring", stiffness: 520, damping: 18, mass: 0.9 }}
-              className="origin-left font-serif text-[clamp(64px,13vw,132px)] italic leading-[0.85] tracking-[-0.02em] text-stamp"
+              className="origin-left font-serif text-[clamp(60px,13vw,132px)] italic leading-[0.85] tracking-[-0.02em] text-stamp"
             >
               Objection!
             </motion.h2>
 
             <div className="flex flex-col gap-2">
               <Eyebrow>Grounds</Eyebrow>
-              <p className="font-display text-2xl font-semibold tracking-tight">
+              <p className="font-display text-xl font-semibold tracking-tight sm:text-2xl">
                 {GROUNDS_LABEL[objection.grounds as Grounds] ?? objection.grounds}
               </p>
-              <p className="text-[16px] leading-relaxed text-foreground/80">{objection.explanation}</p>
+              <p className="text-[15px] leading-relaxed text-foreground/80 sm:text-[16px]">{objection.explanation}</p>
             </div>
 
             {target && (
               <blockquote
                 className={cn(
-                  "flex flex-col gap-1.5 rounded-r-xl border-l-[3px] bg-bench-raised px-5 py-4",
+                  "flex flex-col gap-1.5 rounded-r-xl border-l-[3px] bg-bench-raised px-4 py-3 sm:px-5 sm:py-4",
                   challenged === "defense" ? "border-defense" : "border-prosecution",
                 )}
               >
                 <Eyebrow className={sideText(challenged)}>
                   Challenged statement, {SIDE_LABEL[challenged]}
                 </Eyebrow>
-                <p className="font-serif text-[19px] italic leading-snug text-foreground/90">
+                <p className="font-serif text-[17px] italic leading-snug text-foreground/90 sm:text-[19px]">
                   "{target.claim}"
                 </p>
               </blockquote>
             )}
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="hidden gap-3 sm:grid sm:grid-cols-2">
               <div className="rounded-xl border border-line-strong p-4">
                 <p className="font-semibold text-foreground">If you sustain</p>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -141,6 +141,7 @@ export function ObjectionOverlay({
                 className="inline-flex min-h-14 flex-1 items-center justify-center gap-2.5 rounded-2xl bg-brass text-[17px] font-semibold text-primary-foreground transition-colors hover:bg-brass-strong disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass-strong focus-visible:ring-offset-2 focus-visible:ring-offset-bench"
               >
                 <IconGavel className="size-5" aria-hidden="true" /> Sustained
+                <span className="text-sm font-normal opacity-70 sm:hidden">(strike it)</span>
               </button>
               <button
                 type="button"
@@ -149,9 +150,13 @@ export function ObjectionOverlay({
                 className="inline-flex min-h-14 flex-1 items-center justify-center rounded-2xl border border-brass/70 text-[17px] font-semibold text-foreground transition-colors hover:bg-brass-deep disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
               >
                 Overruled
+                <span className="ml-2 text-sm font-normal text-muted-foreground sm:hidden">(it stands)</span>
               </button>
             </div>
-            <p className="text-center text-xs text-muted-foreground">
+            <p className="text-center text-xs text-muted-foreground sm:hidden">
+              Overruling costs {SIDE_LABEL[raiser]} a point. Nothing proceeds until you rule.
+            </p>
+            <p className="hidden text-center text-xs text-muted-foreground sm:block">
               Nothing proceeds until you rule. Your ruling is written to the transcript.
             </p>
           </motion.section>
