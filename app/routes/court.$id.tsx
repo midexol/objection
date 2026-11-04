@@ -189,7 +189,7 @@ function Courtroom({ file }: { file: CaseFile }) {
             <div className="flex min-w-0 flex-col gap-1">
               <Eyebrow>
                 Case {k.id.slice(5, 11).toUpperCase()}
-                {k.rehearsed && <span className="ml-3 text-brass">Rehearsed sample trial</span>}
+                {k.rehearsed && <span className="ml-3 text-stamp">Rehearsed sample trial</span>}
               </Eyebrow>
               <h1 className="font-display text-[clamp(22px,2.6vw,34px)] font-semibold leading-[1.08] tracking-tight">
                 {k.motion}
@@ -487,7 +487,7 @@ function JudgeBench({
         <div className="brass-edge absolute inset-x-0 top-0 h-px" />
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-col gap-1">
-            <Eyebrow className="text-brass">Your bench</Eyebrow>
+            <Eyebrow className="text-stamp">Your bench</Eyebrow>
             <p className="text-sm text-muted-foreground">
               {ruled
                 ? "The record is closed."

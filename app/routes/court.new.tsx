@@ -76,11 +76,11 @@ export default function FileCaseRoute() {
         </nav>
 
         <header className="flex flex-col gap-3">
-          <Eyebrow className="text-brass">File a case</Eyebrow>
+          <Eyebrow className="text-stamp">File a case</Eyebrow>
           <h1 className="font-display text-[clamp(40px,6vw,76px)] font-extrabold leading-[0.92] tracking-[-0.04em]">
             State the motion.
             <br />
-            <span className="font-serif font-normal italic text-foreground/70">Bring the evidence.</span>
+            <span className="highlight font-serif font-normal italic">Bring the evidence.</span>
           </h1>
         </header>
 
@@ -88,7 +88,7 @@ export default function FileCaseRoute() {
           <div className="flex min-w-0 flex-[2_1_560px] flex-col gap-10">
             <fieldset className="flex flex-col gap-3">
               <legend className="mb-3 flex items-baseline gap-3">
-                <span className="font-mono text-xs text-brass">01</span>
+                <span className="font-mono text-xs text-stamp">01</span>
                 <span className="font-display text-xl font-semibold tracking-tight">What kind of decision?</span>
               </legend>
               <div role="radiogroup" className="flex flex-wrap gap-2">
@@ -114,7 +114,7 @@ export default function FileCaseRoute() {
 
             <div className="flex flex-col gap-3">
               <label htmlFor="motion" className="flex items-baseline gap-3">
-                <span className="font-mono text-xs text-brass">02</span>
+                <span className="font-mono text-xs text-stamp">02</span>
                 <span className="font-display text-xl font-semibold tracking-tight">The motion, as a yes or no question</span>
               </label>
               <textarea
@@ -143,7 +143,7 @@ export default function FileCaseRoute() {
 
             <div className="flex flex-col gap-3">
               <label htmlFor="context" className="flex items-baseline gap-3">
-                <span className="font-mono text-xs text-brass">03</span>
+                <span className="font-mono text-xs text-stamp">03</span>
                 <span className="font-display text-xl font-semibold tracking-tight">Background</span>
                 <span className="text-sm text-muted-foreground">optional</span>
               </label>
@@ -161,7 +161,7 @@ export default function FileCaseRoute() {
             <div className="flex flex-col gap-4">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <span className="flex items-baseline gap-3">
-                  <span className="font-mono text-xs text-brass">04</span>
+                  <span className="font-mono text-xs text-stamp">04</span>
                   <span className="font-display text-xl font-semibold tracking-tight">Evidence</span>
                 </span>
                 <span className="text-sm text-muted-foreground">Counsel can only quote what you put here.</span>

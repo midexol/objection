@@ -26,9 +26,9 @@ export function ExhibitCard({
   const total = exhibit.citedBy.defense + exhibit.citedBy.prosecution;
   const cite = (
     citedBy === "defense"
-      ? { "--cite-color": "221 100% 77%" }
+      ? { "--cite-color": "226 86% 48%" }
       : citedBy === "prosecution"
-        ? { "--cite-color": "21 100% 67%" }
+        ? { "--cite-color": "8 82% 48%" }
         : {}
   ) as Record<string, string>;
   return (

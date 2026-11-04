@@ -43,9 +43,9 @@ export default function DocketRoute() {
 
         <header className="flex flex-wrap items-end justify-between gap-6">
           <div className="flex flex-col gap-3">
-            <Eyebrow className="text-brass">Your docket</Eyebrow>
+            <Eyebrow className="text-stamp">Your docket</Eyebrow>
             <h1 className="font-display text-[clamp(40px,5.6vw,72px)] font-extrabold leading-[0.92] tracking-[-0.04em]">
-              The court is <span className="font-serif font-normal italic text-brass">in session.</span>
+              The court is <span className="highlight font-serif font-normal italic">in session.</span>
             </h1>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -97,7 +97,7 @@ export default function DocketRoute() {
                     <span className="min-w-0 flex-[1_1_320px] font-display text-lg font-semibold tracking-tight">
                       {c.motion}
                     </span>
-                    {c.rehearsed && <span className="text-xs text-brass">Sample</span>}
+                    {c.rehearsed && <span className="text-xs font-medium text-stamp">Sample</span>}
                     {c.decision ? (
                       <span className="text-sm text-foreground/80">{DECISION_LABEL[c.decision as Decision]}</span>
                     ) : (

@@ -14,13 +14,13 @@ export function Wordmark({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "font-display inline-flex items-baseline font-extrabold leading-none tracking-tight text-foreground",
+        "font-didone inline-flex items-baseline leading-none tracking-[-0.02em] text-foreground",
         className,
       )}
       aria-label="Objection!"
     >
-      <span aria-hidden="true">objection</span>
-      <span aria-hidden="true" className="font-serif font-normal italic text-brass">
+      <span aria-hidden="true">Objection</span>
+      <span aria-hidden="true" className="text-stamp">
         !
       </span>
     </span>
@@ -127,7 +127,7 @@ export function CitationChip({
   const cls = cn(
     "inline-flex min-h-7 items-center gap-1.5 rounded-md px-2 font-mono text-[11px] font-medium",
     verified
-      ? "bg-paper text-paper-ink"
+      ? "bg-paper text-paper-ink ring-1 ring-line"
       : "bg-paper-dim text-paper-ink line-through decoration-failed-ink decoration-2",
   );
   if (!onClick) return <span className={cls}>{content}</span>;

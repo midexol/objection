@@ -31,7 +31,7 @@ function useEnter() {
 }
 
 const pillIvory =
-  "inline-flex min-h-12 items-center justify-center rounded-full bg-paper px-7 text-[15px] font-semibold text-paper-ink transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-ink";
+  "inline-flex min-h-12 items-center justify-center rounded-full bg-foreground px-7 text-[15px] font-semibold text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-ink";
 const pillGold =
   "inline-flex min-h-14 items-center justify-center rounded-full bg-brass px-9 text-base font-semibold text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass-strong focus-visible:ring-offset-2 focus-visible:ring-offset-ink";
 const pillGhost =
@@ -44,7 +44,7 @@ export default function LandingRoute() {
   return (
     <div ref={scroller} className="film-ink fixed inset-0 overflow-y-auto overflow-x-hidden">
       <header className="fixed inset-x-0 top-0 z-30 flex items-center justify-between gap-4 px-4 py-5 sm:px-10">
-        <span className="rounded-full bg-ink/70 px-4 py-2 backdrop-blur">
+        <span className="rounded-full border border-line bg-bench/80 px-4 py-2 backdrop-blur">
           <Wordmark className="text-[22px]" />
         </span>
         <a href={enter("/court")} className={pillIvory}>
@@ -54,7 +54,7 @@ export default function LandingRoute() {
 
       <Film scroller={scroller} enterHref={enter("/court/new")} sampleHref={enter("/court?sample=1")} />
 
-      <section className="relative isolate overflow-hidden border-t border-foreground/10">
+      <section className="relative isolate overflow-hidden bg-[hsl(52_100%_60%)]">
         <img
           src={IMAGES.lamp}
           alt=""
@@ -62,9 +62,9 @@ export default function LandingRoute() {
           onError={(e) => {
             e.currentTarget.style.display = "none";
           }}
-          className="absolute inset-0 -z-20 h-full w-full object-cover opacity-40"
+          className="absolute inset-0 -z-20 h-full w-full object-cover opacity-25 mix-blend-multiply grayscale"
         />
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(70%_70%_at_50%_45%,transparent,hsl(30_10%_2%)_85%)]" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(70%_70%_at_50%_45%,transparent,hsl(52_100%_60%)_85%)]" />
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-10 px-4 py-32 text-center sm:py-44">
           <h2
             className="font-didone font-black leading-[0.9] tracking-[-0.03em]"
@@ -72,9 +72,9 @@ export default function LandingRoute() {
           >
             Your next big call
             <br />
-            <span className="font-serif font-normal italic text-brass">deserves a cross-examination.</span>
+            <span className="font-serif font-normal italic text-defense">deserves a cross-examination.</span>
           </h2>
-          <p className="max-w-[520px] text-[17px] leading-relaxed text-foreground/70">
+          <p className="max-w-[520px] text-[17px] leading-relaxed text-foreground/80">
             File a motion, enter your evidence, and watch both sides argue it. The sample trial runs without any API key.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
@@ -88,7 +88,7 @@ export default function LandingRoute() {
         </div>
       </section>
 
-      <footer className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-4 px-4 pb-10 pt-6 text-[13px] text-foreground/45 sm:px-10">
+      <footer className="bg-[hsl(52_100%_60%)]"><div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-4 px-4 pb-10 pt-6 text-[13px] text-foreground/60 sm:px-10">
         <span>Objection!, built on Agent-Native for the Builder.io hackathon, November 2026</span>
         <div className="flex flex-wrap items-center gap-5">
           <a
@@ -99,7 +99,7 @@ export default function LandingRoute() {
           </a>
           <span>Photos by Tim Mus, Johnny Briggs and Alexander Voronov on Unsplash</span>
         </div>
-      </footer>
+      </div></footer>
     </div>
   );
 }

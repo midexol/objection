@@ -117,7 +117,7 @@ export default function RecordRoute() {
             </div>
 
             <div className="flex flex-col gap-3 rounded-2xl bg-paper-ink p-6 text-paper sm:p-8">
-              <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-brass">
+              <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-highlight">
                 RULING, {DECISION_LABEL[decision].toUpperCase()}
               </span>
               <p className="font-serif text-[clamp(24px,2.8vw,34px)] leading-[1.2]">{k.ruling}</p>

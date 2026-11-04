@@ -35,6 +35,18 @@ const BEAT = Object.fromEntries(BEATS.map((b) => [b.key, b])) as unknown as Reco
   { a: number; b: number }
 >;
 
+/** One bright ground per beat. Ink type stays legible on every one of them. */
+const FIELDS: { beat: (typeof BEATS)[number]["key"]; color: string }[] = [
+  { beat: "hero", color: "hsl(52 100% 60%)" },
+  { beat: "agree", color: "hsl(330 100% 87%)" },
+  { beat: "evidence", color: "hsl(198 100% 84%)" },
+  { beat: "argument", color: "hsl(152 72% 80%)" },
+  { beat: "objection", color: "hsl(12 100% 88%)" },
+  { beat: "ruling", color: "hsl(38 100% 78%)" },
+  { beat: "agents", color: "hsl(232 100% 89%)" },
+  { beat: "record", color: "hsl(52 100% 60%)" },
+];
+
 export const IMAGES = {
   columns:
     "https://images.unsplash.com/photo-1713620689462-e201360c743e?auto=format&fit=crop&w=2400&q=70",
@@ -161,16 +173,28 @@ function Plates({ p }: { p: number }) {
   const warm = ss(0.9, 0.96, p);
   return (
     <div className="absolute inset-0" aria-hidden="true">
+      {/* Colour fields: each beat has its own bright ground, cross-dissolved on the clock. */}
+      {FIELDS.map((f, i) => (
+        <div
+          key={f.beat}
+          className="absolute inset-0"
+          style={{
+            background: f.color,
+            opacity: i === 0 ? 1 : win(p, BEAT[f.beat].a, BEAT[f.beat].b, 0.03, f.beat === "record"),
+          }}
+        />
+      ))}
       <Photo
         src={IMAGES.columns}
-        style={{ opacity: 0.62 * hero, transform: `scale(${1.08 + p * 1.4})` }}
+        style={{ opacity: 0.3 * hero, transform: `scale(${1.08 + p * 1.4})`, filter: "grayscale(1) contrast(1.15)", mixBlendMode: "multiply" }}
       />
       <Photo
         src={IMAGES.desk}
         style={{
-          opacity: 0.5 * desk,
+          opacity: 0.32 * desk,
           transform: `scale(${1.12 - ss(BEAT.agree.a, BEAT.agree.b, p) * 0.08})`,
-          filter: "saturate(0.7)",
+          filter: "grayscale(1) contrast(1.1)",
+          mixBlendMode: "multiply",
         }}
       />
       <div className="film-felt absolute inset-0" style={{ opacity: Math.min(1, felt) }} />
@@ -180,7 +204,7 @@ function Plates({ p }: { p: number }) {
         style={{
           opacity: warm,
           background:
-            "radial-gradient(60% 55% at 62% 30%, hsl(40 80% 55% / 0.22), transparent 70%)",
+            "radial-gradient(60% 55% at 62% 30%, hsl(52 100% 62% / 0.45), transparent 70%)",
         }}
       />
       {/* Cold blue light for the objection. */}
@@ -188,7 +212,7 @@ function Plates({ p }: { p: number }) {
         className="absolute inset-0"
         style={{
           opacity: win(p, BEAT.objection.a, BEAT.objection.b, 0.03),
-          background: "radial-gradient(50% 50% at 50% 45%, hsl(42 61% 61% / 0.12), transparent 70%)",
+          background: "radial-gradient(50% 50% at 50% 45%, hsl(8 82% 55% / 0.10), transparent 70%)",
         }}
       />
     </div>
@@ -216,7 +240,7 @@ function Hero({ p, enterHref, sampleHref }: { p: number; enterHref: string; samp
             opacity: lerp(1, 0.2, recede),
           }}
         >
-          OBJECTION<span className="font-serif font-normal italic text-brass">!</span>
+          Objection<span className="text-stamp">!</span>
         </h1>
         <div className="flex flex-col items-center gap-7" style={{ opacity: ui, transform: `translateY(${recede * 40}px)` }}>
           <p className="max-w-[600px] text-center text-[19px] leading-relaxed text-foreground/75">
@@ -225,7 +249,7 @@ function Hero({ p, enterHref, sampleHref }: { p: number; enterHref: string; samp
           <div className="flex flex-wrap justify-center gap-3">
             <a
               href={sampleHref}
-              className="inline-flex min-h-12 items-center rounded-full bg-paper px-7 text-[15px] font-semibold text-paper-ink transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+              className="inline-flex min-h-12 items-center rounded-full bg-foreground px-7 text-[15px] font-semibold text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
             >
               Watch a sample trial
             </a>
@@ -323,7 +347,7 @@ function Lockup({
       className="pointer-events-none absolute bottom-8 left-4 right-4 sm:bottom-14 sm:left-10 sm:right-auto sm:max-w-[600px]"
       style={{ opacity: o, transform: `translateY(${rise}px)` }}
     >
-      <span className="font-mono text-[11px] tracking-[0.2em] text-brass">{String(n).padStart(2, "0")}</span>
+      <span className="font-mono text-[11px] tracking-[0.2em] text-stamp">{String(n).padStart(2, "0")}</span>
       <h2
         className={cn(
           "mt-1 font-didone font-black leading-[0.86] tracking-[-0.03em] text-foreground",
@@ -381,7 +405,7 @@ function AgreeBeat({ p }: { p: number }) {
             {t < 1 && <span className="ml-0.5 inline-block h-5 w-[2px] translate-y-1 bg-brass" />}
           </p>
           <svg className="pointer-events-none absolute inset-x-0 top-1/2 h-6 w-full overflow-visible" viewBox="0 0 100 10" preserveAspectRatio="none">
-            <line x1="0" y1="5" x2={100 * strike} y2="5" stroke="hsl(2 85% 64%)" strokeWidth="1.6" vectorEffect="non-scaling-stroke" />
+            <line x1="0" y1="5" x2={100 * strike} y2="5" stroke="hsl(8 82% 48%)" strokeWidth="1.6" vectorEffect="non-scaling-stroke" />
           </svg>
         </div>
         <span
@@ -429,7 +453,7 @@ function Board({ p }: { p: number }) {
                 opacity: Math.max(drop, inRecord),
                 transform: `translateY(${(1 - Math.max(drop, inRecord)) * -120}px) rotate(${e.rot * Math.max(drop, inRecord)}deg)`,
                 boxShadow: cited
-                  ? `0 0 0 2px hsl(43 78% 73% / ${cited}), 0 0 40px hsl(43 78% 73% / ${cited * 0.6})`
+                  ? `0 0 0 3px hsl(52 100% 55% / ${cited}), 0 0 40px hsl(52 100% 55% / ${cited * 0.8})`
                   : undefined,
               }}
             >
@@ -516,7 +540,7 @@ function CounselCard({
       <p className="mt-1.5 font-display text-[15px] font-semibold leading-snug sm:text-[17px]">{claim}</p>
       <p className="mt-2 font-serif text-[14px] italic leading-snug text-foreground/70 sm:text-[15px]">"{quote}"</p>
       <span
-        className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-paper px-2 py-1 font-mono text-[10.5px] font-medium text-paper-ink"
+        className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-paper px-2 py-1 font-mono text-[10.5px] font-medium text-paper-ink ring-1 ring-line"
         style={{ opacity: 0.5 + tick * 0.5 }}
       >
         Exhibit {exhibit}
@@ -666,7 +690,7 @@ function ObjectionBeat({ p, reduced }: { p: number; reduced: boolean }) {
         g.setTransform(dpr, 0, 0, dpr, 0, 0);
         g.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
         if (vis > 0.001) {
-          g.globalCompositeOperation = "lighter";
+          g.globalCompositeOperation = "source-over";
           const t = reduced ? (pp > a + 0.07 ? 1 : 0) : ss(a + 0.045, a + 0.11, pp);
           const shake = reduced ? 0 : win(pp, a + 0.03, a + 0.05, 0.006) * 3;
           for (const q of particles.current) {
@@ -675,11 +699,11 @@ function ObjectionBeat({ p, reduced }: { p: number; reduced: boolean }) {
             const arc = Math.sin(Math.PI * e) * 120 * q.swirl;
             const x = lerp(q.ax, q.bx, e) + arc + (Math.random() - 0.5) * shake;
             const y = lerp(q.ay, q.by, e) + Math.sin(Math.PI * e) * 40 * q.swirl;
-            // Ivory while it is the quote, red as it fails, brass as the objection.
+            // Ink while it is the quote, vermilion as it fails, cobalt as Defense's objection.
             const failing = win(pp, a + 0.028, a + 0.06, 0.008);
-            const hue = lerp(lerp(40, 2, failing), 43, e);
-            const sat = lerp(lerp(30, 85, failing), 78, e);
-            const light = lerp(lerp(90, 66, failing), 70, e);
+            const hue = lerp(lerp(24, 8, failing), 226, e);
+            const sat = lerp(lerp(18, 82, failing), 86, e);
+            const light = lerp(lerp(10, 48, failing), 46, e);
             g.fillStyle = `hsla(${hue} ${sat}% ${light}% / ${vis})`;
             g.fillRect(x, y, q.size, q.size);
           }
@@ -707,7 +731,7 @@ function ObjectionBeat({ p, reduced }: { p: number; reduced: boolean }) {
           <div className="mt-1 flex items-center gap-1.5 text-failed" style={{ opacity: 0.4 + failing * 0.6 }}>
             <IconX className="size-3.5" strokeWidth={2.6} /> not found in the exhibit text
           </div>
-          <div className="mt-1 text-brass-strong" style={{ opacity: ss(a + 0.08, a + 0.1, p) }}>
+          <div className="mt-1 font-semibold text-defense" style={{ opacity: ss(a + 0.08, a + 0.1, p) }}>
             objection raised by Defense, court paused
           </div>
         </div>
@@ -831,7 +855,7 @@ function AgentsBeat({ p }: { p: number }) {
               {s}
             </span>
           ))}
-          <span className="self-center font-mono text-[11px] text-brass" style={{ opacity: ss(a + 0.04, a + 0.05, p) }}>
+          <span className="self-center font-mono text-[11px] text-stamp" style={{ opacity: ss(a + 0.04, a + 0.05, p) }}>
             all call the same action
           </span>
         </div>
@@ -839,7 +863,7 @@ function AgentsBeat({ p }: { p: number }) {
           <pre className="film-glass hidden whitespace-pre-wrap break-words rounded-xl p-4 sm:min-h-[170px] md:block font-mono text-[12.5px] leading-relaxed text-foreground/85">
             {revealLines(CALL_LINES, callT)}
           </pre>
-          <pre className="film-glass whitespace-pre-wrap break-words rounded-xl border-brass/40 p-4 sm:min-h-[170px] font-mono text-[12.5px] leading-relaxed text-brass-strong">
+          <pre className="film-glass whitespace-pre-wrap break-words rounded-xl border-defense/40 p-4 sm:min-h-[170px] font-mono text-[12.5px] leading-relaxed text-brass-strong">
             {revealLines(REPLY_LINES, replyT)}
           </pre>
         </div>
@@ -879,7 +903,7 @@ function RecordBeat({ p }: { p: number }) {
           Should we migrate from MongoDB to Postgres before launch?
         </p>
         <div className="mt-4 rounded-lg bg-paper-ink p-4 text-paper">
-          <span className="font-mono text-[9.5px] tracking-[0.16em] text-brass">RULING, GRANTED IN PART</span>
+          <span className="font-mono text-[9.5px] tracking-[0.16em] text-highlight">RULING, GRANTED IN PART</span>
           <p className="mt-1 font-serif text-[19px] leading-snug">
             Do not migrate before launch. Move orders and payments in the first sprint after, once Tola is back.
           </p>
