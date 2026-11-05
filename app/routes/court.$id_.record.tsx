@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router";
 import { toast } from "sonner";
 
 import { ghostButton, primaryButton } from "@/components/court/Dialog";
-import { Eyebrow, WeightBar, Wordmark } from "@/components/court/primitives";
+import { Eyebrow, WeightBar } from "@/components/court/primitives";
 import type { Argument, CaseFile } from "@/components/court/types";
 import {
   BASIS_LABEL,
@@ -18,7 +18,7 @@ import {
 } from "@shared/court";
 
 export function meta() {
-  return [{ title: "Decision record - Objection!" }];
+  return [{ title: "Decision - Objection!" }];
 }
 
 function strength(a: Argument) {
@@ -71,7 +71,7 @@ export default function RecordRoute() {
       const r = await callAction("export-record", { id: k.id }, { method: "GET" });
       if (mode === "copy") {
         await navigator.clipboard.writeText(r.markdown);
-        toast.success("Decision record copied as Markdown.");
+        toast.success("Decision copied.");
         return;
       }
       const blob = new Blob([r.markdown], { type: "text/markdown" });
@@ -82,7 +82,7 @@ export default function RecordRoute() {
       a.click();
       URL.revokeObjectURL(url);
     } catch {
-      toast.error("The record could not be exported. Try again.");
+      toast.error("Could not save the decision. Try again.");
     }
   }
 
@@ -94,9 +94,11 @@ export default function RecordRoute() {
             to={`/court/${k.id}`}
             className="inline-flex min-h-10 items-center gap-2 rounded-lg px-2 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
           >
-            <IconArrowLeft className="size-4" aria-hidden="true" /> Courtroom
+            <IconArrowLeft className="size-4" aria-hidden="true" /> Back to the trial
           </Link>
-          <Wordmark className="text-2xl" />
+          <Link to="/court" className="text-sm font-semibold underline-offset-4 hover:underline">
+            My cases
+          </Link>
         </nav>
 
         <div className="flex flex-wrap items-start gap-8">
@@ -108,12 +110,12 @@ export default function RecordRoute() {
             style={{ "--pop": "hsl(232 100% 89%)" } as unknown as Record<string, string>}
           >
             <div className="flex flex-wrap justify-between gap-2 font-mono text-[11px] font-medium tracking-[0.14em] text-paper-muted">
-              <span>DECISION RECORD, CASE {k.id.slice(5, 11).toUpperCase()}</span>
-              <span>RULED {k.ruledAt ? new Date(k.ruledAt).toLocaleDateString([], { day: "numeric", month: "short", year: "numeric" }).toUpperCase() : ""}</span>
+              <span>THE DECISION, CASE {k.id.slice(5, 11).toUpperCase()}</span>
+              <span>DECIDED {k.ruledAt ? new Date(k.ruledAt).toLocaleDateString([], { day: "numeric", month: "short", year: "numeric" }).toUpperCase() : ""}</span>
             </div>
 
             <div className="flex flex-col gap-3">
-              <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-paper-muted">THE MOTION</span>
+              <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-paper-muted">THE QUESTION</span>
               <h1 className="font-didone text-[clamp(32px,4.4vw,58px)] font-normal leading-[1.02] tracking-[-0.01em]">{k.motion}</h1>
             </div>
 
@@ -132,7 +134,7 @@ export default function RecordRoute() {
             {dissent && (
               <section className="flex flex-col gap-2">
                 <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-paper-muted">
-                  DISSENTING OPINION, {SIDE_LABEL[dissentSide].toUpperCase()}
+                  THE OTHER SIDE, {SIDE_LABEL[dissentSide].toUpperCase()}
                 </span>
                 <p className="font-serif text-[20px] italic leading-relaxed text-paper-ink/85">{dissent.body}</p>
               </section>
@@ -140,7 +142,7 @@ export default function RecordRoute() {
 
             <section className="flex flex-col gap-3">
               <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-paper-muted">
-                REOPEN THIS CASE IF
+                LOOK AT THIS AGAIN IF
               </span>
               {k.appealConditions.length ? (
                 <ul className="flex list-disc flex-col gap-1.5 pl-5 text-[16px]">
@@ -158,7 +160,7 @@ export default function RecordRoute() {
               <ul className="grid grid-cols-1 gap-2 text-[15px] sm:grid-cols-2">
                 {file.exhibits.map((e) => (
                   <li key={e.id} className={e.status !== "admitted" ? "text-paper-muted line-through" : ""}>
-                    <span className="font-mono text-[12px] font-semibold">EXHIBIT {e.letter}</span>{" "}
+                    <span className="font-mono text-[12px] font-semibold">EVIDENCE {e.letter}</span>{" "}
                     <span className="font-serif text-[18px]">{e.title}</span>
                   </li>
                 ))}
@@ -169,7 +171,7 @@ export default function RecordRoute() {
           <aside className="flex min-w-0 flex-[1_1_300px] flex-col gap-4 lg:sticky lg:top-6">
             <section className="flex flex-col gap-3 pop bg-bench p-6">
               <h2 className="font-didone text-[28px] leading-none">Take it with you</h2>
-              <p className="text-sm text-muted-foreground">Exports as a Markdown decision record (ADR) your team can keep in the repo.</p>
+              <p className="text-sm text-muted-foreground">Saves the decision as a plain text note your team can keep with its code.</p>
               <button type="button" className={primaryButton} onClick={() => void exportRecord("download")}>
                 <IconDownload className="size-4" aria-hidden="true" /> Download .md
               </button>
@@ -204,7 +206,7 @@ export default function RecordRoute() {
 
             {file.objections.length > 0 && (
               <section className="flex flex-col gap-2 pop bg-bench p-6 text-sm">
-                <Eyebrow>Objections on the record</Eyebrow>
+                <Eyebrow>Objections raised</Eyebrow>
                 <ul className="flex flex-col gap-2">
                   {file.objections.map((o) => (
                     <li key={o.id} className="flex items-center justify-between gap-3">

@@ -50,7 +50,7 @@ export function ExhibitCard({
         <span className="font-semibold tracking-[0.12em]">EXHIBIT {exhibit.letter}</span>
         {citedBy ? (
           <span className="font-semibold uppercase tracking-wide text-paper-ink">
-            Cited now by {citedBy}
+            Being used by {citedBy}
           </span>
         ) : exhibit.addedVia === "sample" ? (
           <span className="text-paper-muted">sample exhibit</span>
@@ -84,8 +84,8 @@ export function ExhibitCard({
           {struck
             ? "Struck by the judge"
             : total === 0
-              ? "Not cited yet"
-              : `Cited ${total}×, Defense ${exhibit.citedBy.defense}, Prosecution ${exhibit.citedBy.prosecution}`}
+              ? "Not used yet"
+              : `Used ${total}×: Defense ${exhibit.citedBy.defense}, Prosecution ${exhibit.citedBy.prosecution}`}
         </span>
         <button
           type="button"
@@ -93,7 +93,7 @@ export function ExhibitCard({
           disabled={disabled}
           className="min-h-8 rounded-md border border-paper-ink/25 px-2.5 text-[12px] font-medium text-paper-ink transition-colors hover:bg-paper-ink hover:text-paper disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper-ink/40"
         >
-          {struck ? "Reinstate" : "Strike"}
+          {struck ? "Put back" : "Remove"}
         </button>
       </div>
       {struck && (
@@ -147,12 +147,12 @@ export function ExhibitDialog({
       open={exhibit !== null}
       onOpenChange={onOpenChange}
       tone="paper"
-      title={exhibit ? `Exhibit ${exhibit.letter}: ${exhibit.title}` : ""}
+      title={exhibit ? `Evidence ${exhibit.letter}: ${exhibit.title}` : ""}
       description={exhibit?.source ? `Source: ${exhibit.source}` : "Entered by the judge"}
     >
       {missing && (
         <p className="rounded-lg border border-failed-ink/40 bg-paper-dim px-3 py-2 text-sm text-paper-ink">
-          The quote <span className="font-serif italic">"{missing.quote}"</span> does not appear in this exhibit. The court's citation check rejected it.
+          The quote <span className="font-serif italic">"{missing.quote}"</span> is not in this evidence, so the court rejected it.
         </p>
       )}
       <p className="whitespace-pre-wrap font-serif text-[19px] leading-relaxed">
@@ -226,7 +226,7 @@ export function AddExhibitDialog({
       { caseId, title: title.trim(), content: content.trim(), source: source.trim() },
       {
         onSuccess: (r) => {
-          toast.success(`Exhibit ${r.letter} admitted. Both counsel can cite it.`);
+          toast.success(`Evidence ${r.letter} added. Both lawyers can use it.`);
           reset();
           onOpenChange(false);
         },
@@ -241,7 +241,7 @@ export function AddExhibitDialog({
         onOpenChange(o);
         if (!o) reset();
       }}
-      title="Enter an exhibit"
+      title="Add evidence"
       description="Counsel can only quote what is on the board. Paste text or load a text file."
     >
       {suggestion && !content && (
@@ -331,7 +331,7 @@ export function AddExhibitDialog({
           </button>
           <button type="submit" className={primaryButton} disabled={add.isPending || !title || !content}>
             <IconPlus className="size-4" aria-hidden="true" />
-            {add.isPending ? "Entering…" : "Admit exhibit"}
+            {add.isPending ? "Adding…" : "Add this evidence"}
           </button>
         </div>
       </form>

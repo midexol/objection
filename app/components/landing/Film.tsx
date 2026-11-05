@@ -251,7 +251,7 @@ function Hero({ p, enterHref, sampleHref }: { p: number; enterHref: string; samp
               href={sampleHref}
               className="inline-flex min-h-12 items-center rounded-full bg-foreground px-7 text-[15px] font-semibold text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
             >
-              Watch a sample trial
+              Watch a demo trial
             </a>
             <a
               href={enterHref}

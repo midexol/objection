@@ -113,7 +113,7 @@ export function CitationChip({
 }) {
   const content = (
     <>
-      <span>Exhibit {exhibit}</span>
+      <span>Evidence {exhibit}</span>
       {verified ? (
         <IconCheck className="size-3.5 text-verified-ink" strokeWidth={2.6} aria-label="verified" />
       ) : (
@@ -154,9 +154,9 @@ export function WeightBar({
     <div className="flex flex-col gap-2">
       {!compact && (
         <div className="flex items-baseline justify-between gap-3">
-          <Eyebrow>Weight of argument</Eyebrow>
+          <Eyebrow>Who is ahead</Eyebrow>
           {caption && (
-            <span className="text-xs text-muted-foreground">Scored by rule from standing, verified arguments</span>
+            <span className="text-xs text-muted-foreground">Counts only points whose quotes were checked</span>
           )}
         </div>
       )}
@@ -229,7 +229,7 @@ export function Scoreboard({ defensePct, className }: { defensePct: number; clas
     <div
       className={cn("flex h-[60px] overflow-hidden border-y-[1.5px] border-brass sm:h-[76px]", className)}
       role="img"
-      aria-label={`Weight of argument: Defense ${defensePct} percent, Prosecution ${prosecutionPct} percent`}
+      aria-label={`Who is ahead: Defense ${defensePct} percent, Prosecution ${prosecutionPct} percent`}
     >
       <motion.div
         className="flex min-w-0 items-center gap-3 bg-defense px-4 text-white sm:px-8"
@@ -240,14 +240,14 @@ export function Scoreboard({ defensePct, className }: { defensePct: number; clas
         <span className="font-didone text-[34px] leading-none tabular-nums sm:text-[52px]">{defensePct}</span>
         <span className="flex flex-col font-mono text-[10px] font-medium uppercase leading-tight tracking-[0.16em] sm:text-[11px]">
           <span>Defense</span>
-          <span className="hidden opacity-80 sm:inline">for the motion</span>
+          <span className="hidden opacity-80 sm:inline">says yes</span>
         </span>
       </motion.div>
       <div className="w-[1.5px] shrink-0 bg-brass" />
       <div className="flex min-w-0 flex-1 items-center justify-end gap-3 bg-prosecution px-4 text-white sm:px-8">
         <span className="flex flex-col items-end font-mono text-[10px] font-medium uppercase leading-tight tracking-[0.16em] sm:text-[11px]">
           <span>Prosecution</span>
-          <span className="hidden opacity-80 sm:inline">against it</span>
+          <span className="hidden opacity-80 sm:inline">says no</span>
         </span>
         <span className="font-didone text-[34px] leading-none tabular-nums sm:text-[52px]">{prosecutionPct}</span>
       </div>

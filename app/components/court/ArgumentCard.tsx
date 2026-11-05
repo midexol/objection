@@ -10,7 +10,7 @@ import type { Argument, Question } from "./types";
 
 const STAGE_LABEL: Record<(typeof STAGES)[number], string> = {
   opening: "Opening",
-  rebuttal: "Rebuttal",
+  rebuttal: "Reply",
   closing: "Closing",
 };
 
@@ -160,12 +160,12 @@ export function ArgumentCard({
           >
             <div className="flex flex-col gap-3 border-t border-line pt-3 text-[13px]">
               <div className="flex flex-col gap-1">
-                <Eyebrow>Reasoning</Eyebrow>
+                <Eyebrow>Why</Eyebrow>
                 <p className="text-foreground/80">{argument.reasoning || "No reasoning given."}</p>
               </div>
               {argument.citations.length > 0 && (
                 <div className="flex flex-col gap-1.5">
-                  <Eyebrow>Evidence quoted</Eyebrow>
+                  <Eyebrow>Quotes from the evidence</Eyebrow>
                   <ul className="flex flex-col gap-1.5">
                     {argument.citations.map((c, i) => (
                       <li key={i} className="flex gap-2">
@@ -207,7 +207,7 @@ export function DraftingCard({ side }: { side: "defense" | "prosecution" }) {
       aria-live="polite"
     >
       <span className="court-shimmer font-display text-[17px] font-semibold">
-        {side === "defense" ? "Defense" : "Prosecution"} is reading the record…
+        {side === "defense" ? "Defense" : "Prosecution"} is thinking…
       </span>
       <div className="flex flex-col gap-2">
         <span className="h-2.5 w-11/12 animate-pulse rounded bg-line-strong" />

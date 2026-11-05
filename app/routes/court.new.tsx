@@ -70,17 +70,17 @@ export default function FileCaseRoute() {
             to="/court"
             className="inline-flex min-h-10 items-center gap-2 rounded-lg px-2 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
           >
-            <IconArrowLeft className="size-4" aria-hidden="true" /> Docket
+            <IconArrowLeft className="size-4" aria-hidden="true" /> My cases
           </Link>
           <Wordmark className="text-2xl" />
         </nav>
 
         <header className="flex flex-col gap-3">
-          <Eyebrow className="text-stamp">File a case</Eyebrow>
+          <Eyebrow className="text-stamp">New case</Eyebrow>
           <h1 className="font-display text-[clamp(40px,6vw,76px)] font-extrabold leading-[0.92] tracking-[-0.04em]">
-            State the motion.
+            Ask a yes/no question.
             <br />
-            <span className="highlight font-serif font-normal italic">Bring the evidence.</span>
+            <span className="highlight font-serif font-normal italic">Add what you know.</span>
           </h1>
         </header>
 
@@ -152,7 +152,7 @@ export default function FileCaseRoute() {
                 rows={3}
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
-                placeholder="Who you are, what is at stake, and any constraint the court should know."
+                placeholder="Who you are, what is at stake, and any limits to keep in mind."
                 maxLength={2000}
                 className={cn(fieldClass, "resize-y")}
               />
@@ -164,7 +164,7 @@ export default function FileCaseRoute() {
                   <span className="font-mono text-xs text-stamp">04</span>
                   <span className="font-display text-xl font-semibold tracking-tight">Evidence</span>
                 </span>
-                <span className="text-sm text-muted-foreground">Counsel can only quote what you put here.</span>
+                <span className="text-sm text-muted-foreground">The lawyers can only quote what you put here.</span>
               </div>
               <AnimatePresence initial={false}>
                 {exhibits.map((e, i) => (
@@ -187,7 +187,7 @@ export default function FileCaseRoute() {
                   onClick={() => setExhibits((list) => [...list, { key: nextKey++, title: "", content: "", source: "" }])}
                   className="flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-dashed border-line-strong text-sm font-medium text-muted-foreground transition-colors hover:border-brass/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
                 >
-                  <IconPlus className="size-4" aria-hidden="true" /> Add another exhibit
+                  <IconPlus className="size-4" aria-hidden="true" /> Add more evidence
                 </button>
               )}
             </div>
@@ -195,7 +195,7 @@ export default function FileCaseRoute() {
 
           <aside className="flex min-w-0 flex-[1_1_300px] flex-col gap-4 lg:sticky lg:top-6">
             <div className="rounded-[24px] border border-line bg-bench/85 p-6">
-              <Eyebrow>On the docket</Eyebrow>
+              <Eyebrow>Your case</Eyebrow>
               <p className="mt-3 font-display text-2xl font-semibold leading-tight tracking-tight">
                 {motionText.trim() || <span className="font-serif font-normal italic text-muted-foreground">{meta.example}</span>}
               </p>
@@ -205,22 +205,22 @@ export default function FileCaseRoute() {
                   <dd className="font-medium">{meta.label}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Exhibits</dt>
+                  <dt className="text-muted-foreground">Evidence</dt>
                   <dd className="font-medium tabular-nums">{filled.length}</dd>
                 </div>
               </dl>
               {filled.length === 0 && (
                 <p className="mt-4 rounded-lg bg-brass-deep px-3 py-2 text-xs text-brass-strong">
-                  With no exhibits, counsel can only argue from general knowledge, and every claim will be marked uncited.
+                  With no evidence, the lawyers can only use general knowledge, and nothing will be backed by a quote.
                 </p>
               )}
               <button type="submit" className={cn(primaryButton, "mt-6 w-full")} disabled={!motionValid || file.isPending}>
                 <IconGavel className="size-4" aria-hidden="true" />
-                {file.isPending ? "Filing…" : "File the case"}
+                {file.isPending ? "Starting…" : "Start the case"}
               </button>
             </div>
             <p className="px-2 text-xs leading-relaxed text-muted-foreground">
-              You can add or strike exhibits during the trial. Any agent, including Claude Code over MCP, can file cases here too.
+              You can add or remove evidence during the trial.
             </p>
           </aside>
         </form>
@@ -265,7 +265,7 @@ function ExhibitDraft({
       className="exhibit-paper flex flex-col gap-3 rounded-2xl p-5"
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[11px] font-semibold tracking-[0.14em]">EXHIBIT {letter}</span>
+        <span className="font-mono text-[11px] font-semibold tracking-[0.14em]">EVIDENCE {letter}</span>
         <div className="flex items-center gap-1">
           <button
             type="button"
@@ -278,7 +278,7 @@ function ExhibitDraft({
             <button
               type="button"
               onClick={onRemove}
-              aria-label={`Remove Exhibit ${letter}`}
+              aria-label={`Remove evidence ${letter}`}
               className="inline-flex size-9 items-center justify-center rounded-md text-paper-ink hover:bg-paper-dim focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper-ink/40"
             >
               <IconTrash className="size-4" aria-hidden="true" />
@@ -300,7 +300,7 @@ function ExhibitDraft({
         </div>
       </div>
       <label className="sr-only" htmlFor={`ex-${exhibit.key}-title`}>
-        Exhibit {letter} title
+        Evidence {letter} title
       </label>
       <input
         id={`ex-${exhibit.key}-title`}

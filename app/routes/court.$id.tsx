@@ -55,6 +55,37 @@ function readSoundPref() {
   }
 }
 
+const STAGE_PLAIN: Record<string, string> = { opening: "opening", rebuttal: "reply", closing: "closing" };
+
+const STEPS = ["Add evidence", "Hear the lawyers", "Handle objections", "Give your verdict"];
+
+function StepGuide({ step, pending, hint, onStart }: { step: number; pending: boolean; hint: string; onStart?: (() => void) | undefined }) {
+  const current = pending ? 2 : step;
+  return (
+    <div className="mx-auto mt-5 max-w-[1600px] px-4 sm:px-6 lg:px-8">
+      <div className="pop-sm flex flex-col gap-3 bg-bench px-4 py-3 sm:flex-row sm:items-center sm:gap-6">
+        <ol className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          {STEPS.map((label, i) => (
+            <li
+              key={label}
+              aria-current={i === current ? "step" : undefined}
+              className={i === current ? "rounded-full bg-highlight px-3 py-1 font-semibold" : "px-1 py-1 text-foreground/55"}
+            >
+              {i + 1}. {label}
+            </li>
+          ))}
+        </ol>
+        <p className="text-sm font-medium text-foreground/80">{hint}</p>
+        {onStart && (
+          <button type="button" className={cn(primaryButton, "sm:ml-auto")} onClick={onStart}>
+            <IconPlayerPlay className="size-4" aria-hidden="true" /> Start the trial
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function CourtroomRoute() {
   const { id = "" } = useParams();
   const { data, isLoading, error } = useActionQuery("get-case", { id });
@@ -136,7 +167,7 @@ function Courtroom({ file }: { file: CaseFile }) {
   useEffect(() => {
     if (finished && auto) {
       setAuto(false);
-      toast("Closing statements are done. The court awaits your verdict.");
+      toast("Both sides are done. Time for your verdict.");
     }
   }, [finished, auto]);
 
@@ -153,7 +184,7 @@ function Courtroom({ file }: { file: CaseFile }) {
       seen.current = new Set();
       setTypingId(null);
       setAuto(false);
-      toast("The trial is reset to opening statements.");
+      toast("Trial restarted from the beginning.");
     },
     onError: (e) => toast.error(cleanError(e)),
   });
@@ -190,15 +221,14 @@ function Courtroom({ file }: { file: CaseFile }) {
           <div className="flex min-w-0 flex-[3_1_520px] items-start gap-3">
             <Link
               to="/court"
-              aria-label="Back to the docket"
-              className="mt-1 inline-flex size-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-brass bg-bench transition-colors hover:bg-brass hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-defense"
+              className="mt-1 inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full border-[1.5px] border-brass bg-bench px-4 text-sm font-semibold transition-colors hover:bg-brass hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-defense"
             >
-              <IconArrowLeft className="size-5" aria-hidden="true" />
+              <IconArrowLeft className="size-4" aria-hidden="true" /> My cases
             </Link>
             <div className="flex min-w-0 flex-col gap-1.5">
               <Eyebrow className="text-foreground/70">
                 Case {k.id.slice(5, 11).toUpperCase()}
-                {k.rehearsed && <span className="ml-3 text-stamp">Rehearsed sample trial</span>}
+                {k.rehearsed && <span className="ml-3 text-stamp">Demo trial</span>}
               </Eyebrow>
               <h1 className="font-didone text-[clamp(26px,3.4vw,46px)] font-normal leading-[1.02] tracking-[-0.01em]">
                 {k.motion}
@@ -210,10 +240,10 @@ function Courtroom({ file }: { file: CaseFile }) {
               <TrialProgress turn={k.turn} />
               <span className="text-[11px] font-medium text-foreground/70">
                 {ruled
-                  ? "Record closed"
+                  ? "Case closed"
                   : finished
-                    ? "Closings done"
-                    : `${nextSlot!.stage[0]!.toUpperCase()}${nextSlot!.stage.slice(1)}, ${SIDE_LABEL[nextSlot!.side]} next`}
+                    ? "Both sides are done"
+                    : `Next: ${STAGE_PLAIN[nextSlot!.stage]} from ${SIDE_LABEL[nextSlot!.side]}`}
               </span>
             </div>
             <StatusChip status={k.status} paused={!!pending} />
@@ -228,12 +258,12 @@ function Courtroom({ file }: { file: CaseFile }) {
             </button>
             {!ruled && (
               <button type="button" className={ghostButton} onClick={() => setAddOpen(true)}>
-                <IconPlus className="size-4" aria-hidden="true" /> Add exhibit
+                <IconPlus className="size-4" aria-hidden="true" /> Add evidence
               </button>
             )}
             {ruled ? (
               <Link to={`/court/${k.id}/record`} className={primaryButton}>
-                <IconFileText className="size-4" aria-hidden="true" /> Decision record
+                <IconFileText className="size-4" aria-hidden="true" /> Read the decision
               </Link>
             ) : (
               <button
@@ -242,7 +272,7 @@ function Courtroom({ file }: { file: CaseFile }) {
                 onClick={() => setVerdictOpen(true)}
                 disabled={!!pending || file.arguments.length === 0}
               >
-                <IconGavel className="size-4" aria-hidden="true" /> {finished ? "Deliver verdict" : "Rule early"}
+                <IconGavel className="size-4" aria-hidden="true" /> {finished ? "Give your verdict" : "Decide now"}
               </button>
             )}
           </div>
@@ -253,11 +283,28 @@ function Courtroom({ file }: { file: CaseFile }) {
         <Scoreboard defensePct={file.weight.defensePct} />
       </div>
 
+      {!ruled && (
+        <StepGuide
+          step={finished ? 3 : k.turn > 0 ? 1 : 0}
+          onStart={k.turn === 0 && file.arguments.length === 0 && !needsKey && !pending ? () => { setAuto(true); if (!typingId) callCounsel(); } : undefined}
+          pending={!!pending}
+          hint={
+            pending
+              ? "A lawyer objected. Choose Sustained or Overruled to carry on."
+              : finished
+                ? "Both lawyers have finished. Give your verdict to close the case."
+                : k.turn > 0
+                  ? "Keep the trial going. You can add evidence or ask a question any time."
+                  : "Look over the evidence below, then start the trial."
+          }
+        />
+      )}
+
       {needsKey && (
         <div className="mx-auto mt-5 max-w-[1600px] px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3 pop-sm bg-brass-deep px-5 py-4">
             <p className="text-sm text-brass-strong">
-              Live counsel needs a free model key (Groq, Gemini or OpenRouter) in the server environment. You can still build the evidence board now, or watch the rehearsed sample trial.
+              The AI lawyers are switched off on this server (no AI key is set). You can still add evidence, or open the demo trial to see how it works.
             </p>
           </div>
         </div>
@@ -275,17 +322,17 @@ function Courtroom({ file }: { file: CaseFile }) {
         />
 
         <section
-          aria-label="Evidence board"
+          aria-label="Evidence"
           className="pop grid-paper order-first flex min-w-0 flex-col gap-5 p-5 @3xl:col-span-2 @6xl:order-none @6xl:col-span-1"
           style={{ "--pop": "hsl(52 100% 60%)" } as React.CSSProperties}
         >
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 className="font-didone text-[34px] font-normal leading-none tracking-[-0.01em]">Evidence board</h2>
+            <h2 className="font-didone text-[34px] font-normal leading-none tracking-[-0.01em]">Evidence</h2>
             <Eyebrow>
-              {file.exhibits.filter((e) => e.status === "admitted").length} admitted
+              {file.exhibits.filter((e) => e.status === "admitted").length} in play
               {file.exhibits.some((e) => e.status !== "admitted") &&
-                `, ${file.exhibits.filter((e) => e.status !== "admitted").length} struck`}
-              , shared with both counsel
+                `, ${file.exhibits.filter((e) => e.status !== "admitted").length} removed`}
+              , both lawyers can use it
             </Eyebrow>
           </div>
           <div className="grid grid-cols-1 gap-4 @xl:grid-cols-2 @5xl:grid-cols-3 @6xl:grid-cols-2">
@@ -314,16 +361,16 @@ function Courtroom({ file }: { file: CaseFile }) {
               >
                 <IconPlus className="size-6" aria-hidden="true" />
                 <span className="font-medium">
-                  {k.rehearsed && !hasWitness ? "Call a surprise witness" : "Enter an exhibit"}
+                  {k.rehearsed && !hasWitness ? "Add a surprise twist" : "Add evidence"}
                 </span>
                 <span className="max-w-[260px] text-center text-xs">
-                  Both counsel will rework their arguments around it.
+                  Both lawyers will rethink their arguments.
                 </span>
               </button>
             )}
           </div>
           <p className="text-xs text-foreground/60">
-            The scoreboard above is scored by rule from standing, verified arguments.
+            The bar above shows who is ahead. It counts only points whose quotes were checked.
           </p>
         </section>
 
@@ -431,11 +478,11 @@ function Bench({
             {SIDE_LABEL[side]}
           </span>
           <span className="text-[13px] text-foreground/65">
-            {side === "defense" ? "Argues for the motion" : "Argues against the motion"}
+            {side === "defense" ? "Says yes to the question" : "Says no to the question"}
           </span>
         </div>
         <span className="ml-auto shrink-0 whitespace-nowrap rounded-full border-[1.5px] border-brass bg-bench px-2.5 py-1 text-xs font-semibold tabular-nums">
-          {standing} standing
+          {standing} points
         </span>
       </header>
       <div className="court-scroll -mr-2 flex flex-col gap-3 overflow-y-auto pr-2">
@@ -512,27 +559,27 @@ function JudgeBench({
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-col gap-1">
-            <span className="font-didone text-[34px] leading-none tracking-[-0.01em]">Your bench</span>
+            <span className="font-didone text-[34px] leading-none tracking-[-0.01em]">Your move</span>
             <p className="text-sm font-medium text-foreground/75">
               {ruled
-                ? "The record is closed."
+                ? "This case is closed."
                 : paused
-                  ? "Counsel is paused until you rule on the objection."
+                  ? "The lawyers are waiting for you to rule on the objection."
                   : finished
-                    ? "Both sides have closed. Deliver your verdict."
-                    : `${SIDE_LABEL[next!.side]} gives the ${next!.stage} next.`}
+                    ? "Both sides are done. Give your verdict."
+                    : `Next up: ${SIDE_LABEL[next!.side]} (${STAGE_PLAIN[next!.stage]}).`}
             </p>
           </div>
           {!ruled && finished && (
             <button type="button" className={primaryButton} disabled={paused} onClick={onVerdict}>
-              <IconGavel className="size-4" aria-hidden="true" /> Deliver verdict
+              <IconGavel className="size-4" aria-hidden="true" /> Give your verdict
             </button>
           )}
           {!ruled && !finished && (
             <div className="flex flex-wrap gap-2">
               {k.turn === 0 && file.arguments.length === 0 ? (
                 <button type="button" className={primaryButton} disabled={busy || needsKey} onClick={onToggleAuto}>
-                  <IconPlayerPlay className="size-4" aria-hidden="true" /> Begin the trial
+                  <IconPlayerPlay className="size-4" aria-hidden="true" /> Start the trial
                 </button>
               ) : (
                 <>
@@ -545,11 +592,11 @@ function JudgeBench({
                   >
                     {auto ? (
                       <>
-                        <IconPlayerPause className="size-4" aria-hidden="true" /> Pause counsel
+                        <IconPlayerPause className="size-4" aria-hidden="true" /> Pause
                       </>
                     ) : (
                       <>
-                        <IconPlayerPlay className="size-4" aria-hidden="true" /> Let counsel continue
+                        <IconPlayerPlay className="size-4" aria-hidden="true" /> Play all the way
                       </>
                     )}
                   </button>
@@ -559,7 +606,7 @@ function JudgeBench({
                     disabled={busy || finished || paused || auto || needsKey}
                     onClick={onStep}
                   >
-                    Call {next ? SIDE_LABEL[next.side] : "counsel"}
+                    Next: {next ? SIDE_LABEL[next.side] : "lawyer"} speaks
                   </button>
                 </>
               )}
@@ -570,7 +617,7 @@ function JudgeBench({
         {!ruled && !finished && (
           <form onSubmit={submit} className="flex flex-col gap-2.5">
             <label htmlFor="cross" className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em]">
-              Cross-examine
+              Ask the lawyers a question
             </label>
             <div className="flex flex-wrap gap-2">
               <input
@@ -581,7 +628,7 @@ function JudgeBench({
                 placeholder="Who runs the migration if the backend developer is away?"
                 maxLength={400}
               />
-              <div role="radiogroup" aria-label="Direct question to" className="flex overflow-hidden rounded-full border-[1.5px] border-brass bg-bench">
+              <div role="radiogroup" aria-label="Who to ask" className="flex overflow-hidden rounded-full border-[1.5px] border-brass bg-bench">
                 {(["defense", "prosecution", "both"] as const).map((s) => (
                   <button
                     key={s}
@@ -611,7 +658,7 @@ function JudgeBench({
             </div>
             {openQuestions.length > 0 && (
               <p className="text-xs font-medium text-foreground">
-                Waiting on {openQuestions.map((q) => SIDE_LABEL[q.side]).join(" and ")} to answer: "{openQuestions[0]!.question}"
+                Waiting for {openQuestions.map((q) => SIDE_LABEL[q.side]).join(" and ")} to answer: "{openQuestions[0]!.question}"
               </p>
             )}
           </form>
@@ -623,18 +670,18 @@ function JudgeBench({
             onClick={onRestart}
             className="inline-flex w-fit items-center gap-1.5 text-xs font-medium text-foreground/70 underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-defense"
           >
-            <IconRotate className="size-3.5" aria-hidden="true" /> Restart from opening statements
+            <IconRotate className="size-3.5" aria-hidden="true" /> Start over
           </button>
         )}
       </section>
 
       <section
-        aria-label="Court transcript"
+        aria-label="What happened"
         className="pop flex min-w-0 flex-[1_1_380px] flex-col gap-3 bg-bench p-5 sm:p-6"
       >
         <div className="flex items-baseline justify-between gap-2">
-          <span className="font-didone text-[26px] leading-none">Transcript</span>
-          <span className="text-[11px] text-muted-foreground">who, and from which surface</span>
+          <span className="font-didone text-[26px] leading-none">What happened</span>
+          <span className="text-[11px] text-muted-foreground">in order, newest first</span>
         </div>
         <ol className="court-scroll flex max-h-64 flex-col gap-3 overflow-y-auto font-mono text-[12px]">
           {[...file.transcript].reverse().slice(0, 40).map((t) => (
@@ -656,7 +703,7 @@ function JudgeBench({
               >
                 {t.actor}
                 <span className="ml-2 normal-case tracking-normal text-muted-foreground/70">
-                  {t.via === "engine" ? "counsel" : t.via === "rehearsal" ? "rehearsed" : t.via}
+                  {t.via === "engine" ? "AI" : t.via === "rehearsal" ? "demo" : t.via === "ui" ? "you" : t.via === "agent" ? "Clerk" : t.via === "mcp" || t.via === "a2a" ? "connected agent" : t.via}
                 </span>
               </span>
               <span className="text-foreground/85">{t.entry}</span>

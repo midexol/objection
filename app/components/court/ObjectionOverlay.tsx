@@ -76,11 +76,11 @@ export function ObjectionOverlay({
               <span className="inline-flex items-center gap-3">
                 <CounselSeal side={raiser} size="sm" />
                 <Eyebrow className={sideText(raiser)}>
-                  {SIDE_LABEL[raiser]} rises
-                  {objection.origin === "court" ? ", on the court's citation check" : ""}
+                  {SIDE_LABEL[raiser]} objects
+                  {objection.origin === "court" ? " (a quote did not match the evidence)" : ""}
                 </Eyebrow>
               </span>
-              <Eyebrow className="hidden sm:inline">Both counsel paused</Eyebrow>
+              <Eyebrow className="hidden sm:inline">Both lawyers are waiting for you</Eyebrow>
             </div>
 
             <motion.h2
@@ -94,7 +94,7 @@ export function ObjectionOverlay({
             </motion.h2>
 
             <div className="flex flex-col gap-2">
-              <Eyebrow>Grounds</Eyebrow>
+              <Eyebrow>The problem</Eyebrow>
               <p className="font-display text-xl font-semibold tracking-tight sm:text-2xl">
                 {GROUNDS_LABEL[objection.grounds as Grounds] ?? objection.grounds}
               </p>
@@ -109,7 +109,7 @@ export function ObjectionOverlay({
                 )}
               >
                 <Eyebrow className={sideText(challenged)}>
-                  Challenged statement, {SIDE_LABEL[challenged]}
+                  What {SIDE_LABEL[challenged]} said
                 </Eyebrow>
                 <p className="font-serif text-[17px] italic leading-snug text-foreground/90 sm:text-[19px]">
                   "{target.claim}"
@@ -119,15 +119,15 @@ export function ObjectionOverlay({
 
             <div className="hidden gap-3 sm:grid sm:grid-cols-2">
               <div className="rounded-xl border border-line-strong p-4">
-                <p className="font-semibold text-foreground">If you sustain</p>
+                <p className="font-semibold text-foreground">If you agree (Sustained)</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  The statement is struck. It stops counting toward the weight of argument.
+                  That statement is thrown out and no longer counts.
                 </p>
               </div>
               <div className="rounded-xl border border-line-strong p-4">
-                <p className="font-semibold text-foreground">If you overrule</p>
+                <p className="font-semibold text-foreground">If you disagree (Overruled)</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  The statement stands, and {SIDE_LABEL[raiser]} loses a point for the objection.
+                  The statement stays, and {SIDE_LABEL[raiser]} loses a point.
                 </p>
               </div>
             </div>
@@ -141,7 +141,7 @@ export function ObjectionOverlay({
                 className="inline-flex min-h-14 flex-1 items-center justify-center gap-2.5 rounded-2xl bg-brass text-[17px] font-semibold text-primary-foreground transition-colors hover:bg-brass-strong disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass-strong focus-visible:ring-offset-2 focus-visible:ring-offset-bench"
               >
                 <IconGavel className="size-5" aria-hidden="true" /> Sustained
-                <span className="text-sm font-normal opacity-70 sm:hidden">(strike it)</span>
+                <span className="text-sm font-normal opacity-70 sm:hidden">(throw it out)</span>
               </button>
               <button
                 type="button"
@@ -154,10 +154,10 @@ export function ObjectionOverlay({
               </button>
             </div>
             <p className="text-center text-xs text-muted-foreground sm:hidden">
-              Overruling costs {SIDE_LABEL[raiser]} a point. Nothing proceeds until you rule.
+              Disagreeing costs {SIDE_LABEL[raiser]} a point. Nothing continues until you choose.
             </p>
             <p className="hidden text-center text-xs text-muted-foreground sm:block">
-              Nothing proceeds until you rule. Your ruling is written to the transcript.
+              Nothing continues until you choose. Your choice is saved.
             </p>
           </motion.section>
         </motion.div>

@@ -27,20 +27,20 @@ export const GROUNDS = [
 export type Grounds = (typeof GROUNDS)[number];
 
 export const GROUNDS_LABEL: Record<Grounds, string> = {
-  facts_not_in_evidence: "Assumes facts not in evidence",
-  misquotes_the_record: "Misquotes the record",
-  hearsay: "Hearsay",
-  speculation: "Speculation",
-  relevance: "Relevance",
+  facts_not_in_evidence: "Claims something the evidence does not show",
+  misquotes_the_record: "Quote does not match the evidence",
+  hearsay: "Second-hand claim",
+  speculation: "Guesswork",
+  relevance: "Off topic",
 };
 
 export const BASES = ["record", "inference", "general"] as const;
 export type Basis = (typeof BASES)[number];
 
 export const BASIS_LABEL: Record<Basis, string> = {
-  record: "From the record",
-  inference: "Inference from the record",
-  general: "General knowledge, uncited",
+  record: "From the evidence",
+  inference: "Reasoned from the evidence",
+  general: "General knowledge, no source",
 };
 
 export const CASE_TYPES = [
@@ -87,9 +87,9 @@ export const DECISIONS = ["granted", "granted_in_part", "denied"] as const;
 export type Decision = (typeof DECISIONS)[number];
 
 export const DECISION_LABEL: Record<Decision, string> = {
-  granted: "Motion granted",
-  granted_in_part: "Granted in part",
-  denied: "Motion denied",
+  granted: "Yes",
+  granted_in_part: "Yes, with conditions",
+  denied: "No",
 };
 
 export const SIDE_LABEL: Record<Side, string> = {

@@ -86,11 +86,11 @@ export async function recordArgument(input: ArgumentInput) {
     const letter = c.exhibit.replace(/^exhibit\s+/i, "").trim().toUpperCase();
     const exhibit = byLetter.get(letter);
     let verified = false;
-    if (!exhibit) failures.push(`Exhibit ${letter} is not on the board`);
+    if (!exhibit) failures.push(`Evidence ${letter} does not exist`);
     else if (exhibit.status !== "admitted")
-      failures.push(`Exhibit ${letter} was struck by the judge`);
+      failures.push(`Evidence ${letter} was removed by the judge`);
     else if (!quoteAppearsIn(c.quote, `${exhibit.title}\n${exhibit.content}`))
-      failures.push(`"${c.quote.slice(0, 90)}" does not appear in Exhibit ${letter}`);
+      failures.push(`"${c.quote.slice(0, 90)}" is not in Evidence ${letter}`);
     else verified = true;
     return { exhibit: letter, quote: c.quote, verified };
   });
@@ -145,7 +145,7 @@ export async function recordArgument(input: ArgumentInput) {
     null;
   const opponent = opposing(input.side);
   if (failures.length > 0) {
-    const grounds: Grounds = failures.some((f) => f.includes("does not appear"))
+    const grounds: Grounds = failures.some((f) => f.includes("is not in Evidence"))
       ? "misquotes_the_record"
       : "facts_not_in_evidence";
     objection = { id: newId("obj"), grounds, raisedBy: opponent, origin: "court" };
@@ -155,7 +155,7 @@ export async function recordArgument(input: ArgumentInput) {
       raisedBy: opponent,
       targetArgumentId: argumentId,
       grounds,
-      explanation: `Citation check failed. ${failures.join(". ")}.`,
+      explanation: `A quote did not check out. ${failures.join(". ")}.`,
       origin: "court",
       createdAt: new Date(Date.now() + 1).toISOString(),
     });

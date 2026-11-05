@@ -88,14 +88,14 @@ export default function LandingRoute() {
             <span className="font-serif font-normal italic text-defense">deserves a cross-examination.</span>
           </h2>
           <p className="max-w-[520px] text-[17px] leading-relaxed text-foreground/80">
-            File a motion, enter your evidence, and watch both sides argue it. No sign-up needed: you enter as a guest, and the sample trial runs without any API key.
+            Ask a yes/no question, add your evidence, and watch both sides argue it. No sign-up needed: you enter as a guest, and the demo trial runs without any API key.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a href={enter("/court/new")} className={pillGold}>
               File a case
             </a>
             <a href={enter("/court?sample=1")} className={pillGhost}>
-              Watch a sample trial
+              Watch a demo trial
             </a>
           </div>
         </div>

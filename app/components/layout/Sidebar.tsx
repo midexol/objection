@@ -124,7 +124,7 @@ function HomeNavLink({ collapsed }: { collapsed: boolean }) {
     <Link
       to={HOME_PATH}
       aria-current={active ? "page" : undefined}
-      aria-label={collapsed ? "Docket" : undefined}
+      aria-label={collapsed ? "My cases" : undefined}
       className={cn(
         "flex items-center text-sidebar-accent-foreground transition-colors hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
         active && "bg-sidebar-accent",
@@ -134,7 +134,7 @@ function HomeNavLink({ collapsed }: { collapsed: boolean }) {
       )}
     >
       <IconScale className="size-4 shrink-0" strokeWidth={1.8} />
-      <span className={collapsed ? "sr-only" : "truncate"}>Docket</span>
+      <span className={collapsed ? "sr-only" : "truncate"}>My cases</span>
     </Link>
   );
 
@@ -142,7 +142,7 @@ function HomeNavLink({ collapsed }: { collapsed: boolean }) {
     return (
       <Tooltip>
         <TooltipTrigger asChild>{link}</TooltipTrigger>
-        <TooltipContent side="right">Docket</TooltipContent>
+        <TooltipContent side="right">My cases</TooltipContent>
       </Tooltip>
     );
   }

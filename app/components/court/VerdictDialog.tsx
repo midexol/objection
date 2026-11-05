@@ -71,14 +71,14 @@ export function VerdictDialog({
     <CourtDialog
       open={open}
       onOpenChange={onOpenChange}
-      title="Deliver your verdict"
-      description="The record closes when you rule. Counsel's arguments become the strongest case for and against."
+      title="Give your verdict"
+      description="Pick an answer and say why in your own words. Your decision is saved as a short write-up you can share."
       className="w-[min(700px,calc(100vw-32px))]"
     >
       <WeightBar defensePct={file.weight.defensePct} />
       <form onSubmit={submit} className="flex flex-col gap-5">
         <fieldset className="flex flex-col gap-2">
-          <legend className="mb-2 text-sm font-medium">Your decision on the motion</legend>
+          <legend className="mb-2 text-sm font-medium">Your answer to the question</legend>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-3" role="radiogroup">
             {DECISIONS.map((d) => (
               <label
@@ -105,7 +105,7 @@ export function VerdictDialog({
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="ruling" className="text-sm font-medium">
-            Your ruling, in your words
+            Why, in your words
           </label>
           <textarea
             id="ruling"
@@ -121,7 +121,7 @@ export function VerdictDialog({
 
         <div className="flex flex-col gap-2">
           <label htmlFor="condition" className="text-sm font-medium">
-            Reopen this case if… <span className="font-normal text-muted-foreground">(optional, up to 6)</span>
+            Look at this again if… <span className="font-normal text-muted-foreground">(optional, up to 6)</span>
           </label>
           {conditions.length > 0 && (
             <ul className="flex flex-col gap-1.5">
@@ -167,7 +167,7 @@ export function VerdictDialog({
           </button>
           <button type="submit" className={primaryButton} disabled={deliver.isPending || ruling.trim().length < 4}>
             <IconGavel className="size-4" aria-hidden="true" />
-            {deliver.isPending ? "Ruling…" : "Rule and close the record"}
+            {deliver.isPending ? "Saving…" : "Save my verdict"}
           </button>
         </div>
       </form>
