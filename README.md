@@ -39,9 +39,14 @@ For live counsel on your own cases, set one free key in `.env`:
 
 Optional model overrides: `COUNSEL_GROQ_MODEL`, `COUNSEL_GEMINI_MODEL`, `COUNSEL_OPENROUTER_MODEL`.
 
-## Deploy (Netlify)
+## Deploy (Vercel)
 
-Connect the repo in Netlify, add a Postgres database (Netlify DB or Neon), and set `DATABASE_URL`, `BETTER_AUTH_SECRET` and a counsel key. `netlify.toml` builds the app and runs production migrations.
+1. Import the repo in Vercel. `vercel.json` sets everything else; leave the framework preset alone.
+2. Add a Postgres database (Neon from the Vercel Marketplace sets `DATABASE_URL` for you).
+3. Set `BETTER_AUTH_SECRET` (`openssl rand -hex 32`) and one counsel key (`GROQ_API_KEY`) for Production.
+4. Deploy. `scripts/vercel-build.sh` builds with `NITRO_PRESET=vercel` and, on production only, runs the database migrations.
+
+Keep Fluid Compute on (the default), so counsel turns that wait on a model are not cut off at 10 seconds. `netlify.toml` is still there if you prefer Netlify.
 
 ## Where things live
 
