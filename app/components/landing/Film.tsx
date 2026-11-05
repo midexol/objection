@@ -110,22 +110,22 @@ export function Film({
           Ask an AI about a big decision and it tends to agree with you. That is not advice. It is an echo.
         </Lockup>
         <Lockup p={p} n={3} beat="evidence" title="Evidence.">
-          A trial starts with the record. You enter the documents, numbers and notes. Counsel may quote nothing else.
+          A trial starts with your evidence: the documents, numbers and notes. The lawyers may quote nothing else.
         </Lockup>
         <Lockup p={p} n={4} beat="argument" title="Argument.">
-          Defense argues for the motion, Prosecution against: opening, rebuttal, closing. Every claim points at an exhibit.
+          Defense says yes, Prosecution says no. Each speaks three times: opening, reply, closing. Every claim points at your evidence.
         </Lockup>
         <Lockup p={p} n={5} beat="objection" title="Caught.">
-          Code checks every quote against the exhibit text. This one is not there, so opposing counsel objects and the court stops.
+          The app checks every quote against your evidence. This one is not there, so the other lawyer objects and everything stops.
         </Lockup>
-        <Lockup p={p} n={6} beat="ruling" title="Ruling.">
-          You hold the gavel. Sustain or overrule, strike evidence, call a surprise witness, cross-examine either side.
+        <Lockup p={p} n={6} beat="ruling" title="Your call.">
+          You are the judge. Agree or disagree with each objection, remove evidence, add a surprise, or question either lawyer.
         </Lockup>
         <Lockup p={p} n={7} beat="agents" title="Agents.">
-          Every court act is one action, shared by this screen, the in-app Clerk and any agent over MCP. Agents propose. You approve.
+          Everything you can do here, an AI agent can do too. Agents suggest. You approve.
         </Lockup>
-        <Lockup p={p} n={8} beat="record" title="Record." hold>
-          Your verdict becomes a decision record: the strongest case for and against, the dissent, and when to reopen it.
+        <Lockup p={p} n={8} beat="record" title="Decision." hold>
+          Your verdict becomes a short write-up: the best case for and against, and when to look at it again.
         </Lockup>
 
         {/* Stage counter, like a film reel. */}
@@ -244,7 +244,7 @@ function Hero({ p, enterHref, sampleHref }: { p: number; enterHref: string; samp
         </h1>
         <div className="flex flex-col items-center gap-7" style={{ opacity: ui, transform: `translateY(${recede * 40}px)` }}>
           <p className="max-w-[600px] text-center text-[19px] leading-relaxed text-foreground/75">
-            Put the decision on trial. Two AI counsel argue it from your own evidence, every quote is checked in code, and you hold the gavel.
+            Put the decision on trial. Two AI lawyers argue it from your own evidence, every quote is checked, and you are the judge.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a
@@ -311,7 +311,7 @@ function FloatingPaper({
 }) {
   return (
     <div aria-hidden="true" className={cn("exhibit-paper absolute rounded-xl p-4", className)} style={style}>
-      <span className="font-mono text-[10px] font-semibold tracking-[0.16em]">EXHIBIT {letter}</span>
+      <span className="font-mono text-[10px] font-semibold tracking-[0.16em]">EVIDENCE {letter}</span>
       <p className="mt-1.5 font-serif text-[21px] leading-tight">{title}</p>
       <p className="mt-1 text-[12px] leading-snug text-paper-muted">{line}</p>
     </div>
@@ -457,7 +457,7 @@ function Board({ p }: { p: number }) {
                   : undefined,
               }}
             >
-              <span className="font-mono text-[9px] font-semibold tracking-[0.16em] sm:text-[10px]">EXHIBIT {e.letter}</span>
+              <span className="font-mono text-[9px] font-semibold tracking-[0.16em] sm:text-[10px]">EVIDENCE {e.letter}</span>
               <p className="mt-1 font-serif text-[16px] leading-tight sm:text-[21px]">{e.title}</p>
               <p className="mt-1 hidden text-[12px] leading-snug text-paper-muted sm:block">{e.line}</p>
             </div>
@@ -543,7 +543,7 @@ function CounselCard({
         className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-paper px-2 py-1 font-mono text-[10.5px] font-medium text-paper-ink ring-1 ring-line"
         style={{ opacity: 0.5 + tick * 0.5 }}
       >
-        Exhibit {exhibit}
+        Evidence {exhibit}
         <IconCheck className="size-3.5 text-verified-ink" strokeWidth={2.6} style={{ opacity: tick, transform: `scale(${lerp(0.4, 1, tick)})` }} />
       </span>
     </div>
@@ -748,8 +748,8 @@ const RULINGS = [
   {
     stamp: "Sustained",
     tone: "text-failed-ink",
-    title: "Struck from the record",
-    body: "Prosecution's \"three-week job\" was not in Exhibit B. The statement stops counting.",
+    title: "Thrown out",
+    body: "Prosecution's \"three-week job\" was not in Evidence B. It stops counting.",
     rot: -9,
     x: -18,
   },
@@ -757,12 +757,12 @@ const RULINGS = [
     stamp: "Overruled",
     tone: "text-defense-ink",
     title: "The statement stands",
-    body: "Defense called an estimate speculation. You disagreed, and Defense lost a point for it.",
+    body: "Defense called an estimate a guess. You disagreed, so the statement stays and Defense lost a point.",
     rot: 4,
     x: 6,
   },
   {
-    stamp: "Granted in part",
+    stamp: "Yes, with conditions",
     tone: "text-prosecution-ink",
     title: "The verdict",
     body: "Do not migrate before launch. Move orders and payments in the first sprint after.",

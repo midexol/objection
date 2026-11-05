@@ -256,7 +256,7 @@ export function AddExhibitDialog({
         >
           <IconSparkles className="mt-0.5 size-5 shrink-0 text-brass" aria-hidden="true" />
           <span className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold text-brass-strong">Call a surprise witness</span>
+            <span className="text-sm font-semibold text-brass-strong">Use the surprise twist</span>
             <span className="text-[13px] text-foreground/75">"{suggestion.content}"</span>
           </span>
         </button>

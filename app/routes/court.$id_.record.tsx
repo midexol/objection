@@ -121,14 +121,14 @@ export default function RecordRoute() {
 
             <div className="pop-sm flex flex-col gap-3 bg-highlight p-6 text-paper-ink sm:p-8">
               <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-paper-ink/70">
-                RULING, {DECISION_LABEL[decision].toUpperCase()}
+                VERDICT: {DECISION_LABEL[decision].toUpperCase()}
               </span>
               <p className="font-didone text-[clamp(26px,3vw,40px)] leading-[1.12]">{k.ruling}</p>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <CaseColumn title="Strongest case for" side="defense" arg={forArg} file={file} />
-              <CaseColumn title="Strongest case against" side="prosecution" arg={againstArg} file={file} />
+              <CaseColumn title="Best case for" side="defense" arg={forArg} file={file} />
+              <CaseColumn title="Best case against" side="prosecution" arg={againstArg} file={file} />
             </div>
 
             {dissent && (
@@ -179,7 +179,7 @@ export default function RecordRoute() {
                 <IconCopy className="size-4" aria-hidden="true" /> Copy as Markdown
               </button>
               <Link to="/court/new" className={ghostButton}>
-                <IconScale className="size-4" aria-hidden="true" /> File another case
+                <IconScale className="size-4" aria-hidden="true" /> Start another case
               </Link>
             </section>
 
@@ -187,9 +187,9 @@ export default function RecordRoute() {
               <Eyebrow>The trial in numbers</Eyebrow>
               <dl className="grid grid-cols-2 gap-4">
                 {[
-                  { n: file.exhibits.length, label: struckExhibits ? `exhibits, ${struckExhibits} struck` : "exhibits" },
-                  { n: file.objections.length, label: `objections, ${sustained} sustained` },
-                  { n: file.arguments.length, label: "statements" },
+                  { n: file.exhibits.length, label: struckExhibits ? `pieces of evidence, ${struckExhibits} removed` : "pieces of evidence" },
+                  { n: file.objections.length, label: `objections, ${sustained} agreed with` },
+                  { n: file.arguments.length, label: "things said" },
                   {
                     n: file.arguments.reduce((s, a) => s + a.citations.filter((c) => c.verified).length, 0),
                     label: "verified quotes",
@@ -268,7 +268,7 @@ function CaseColumn({
       )}
       {file.arguments.filter((a) => a.side === side && a.status === "struck").length > 0 && (
         <span className="text-xs text-paper-muted">
-          {file.arguments.filter((a) => a.side === side && a.status === "struck").length} statement(s) struck
+          {file.arguments.filter((a) => a.side === side && a.status === "struck").length} statement(s) thrown out
         </span>
       )}
     </section>

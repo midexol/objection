@@ -7,7 +7,7 @@ import { Wordmark } from "@/components/court/primitives";
 
 const TITLE = "Objection! Put the decision on trial";
 const DESCRIPTION =
-  "Two AI counsel argue your decision from your own evidence, one for and one against. Every quote is checked in code. You hold the gavel.";
+  "Two AI lawyers argue your decision from your own evidence, one for and one against. Every quote is checked. You are the judge.";
 
 export function meta() {
   return [
