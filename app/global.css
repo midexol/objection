@@ -413,6 +413,54 @@
   box-decoration-break: clone;
 }
 
+/* The room: its ground colour follows the trial, like the landing film. */
+.court-room {
+  background-color: var(--room, hsl(42 38% 95%));
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 47px, hsl(24 18% 8% / 0.045) 47px 48px),
+    repeating-linear-gradient(0deg, transparent 0 47px, hsl(24 18% 8% / 0.045) 47px 48px);
+  transition: background-color 700ms ease;
+}
+
+/* Sticker panels: ink outline and a hard offset shadow. */
+.pop {
+  border: 1.5px solid hsl(24 18% 8%);
+  border-radius: 22px;
+  box-shadow: 5px 5px 0 var(--pop, hsl(24 18% 8%));
+}
+.pop-sm {
+  border: 1.5px solid hsl(24 18% 8%);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--pop, hsl(24 18% 8%));
+}
+.pop-hover {
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.pop-hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--pop, hsl(24 18% 8%));
+}
+
+/* Paper pinned to the board with a strip of tape. */
+.tape::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 64px;
+  height: 18px;
+  transform: translateX(-50%) rotate(-2deg);
+  background: hsl(52 100% 60% / 0.85);
+  border: 1px solid hsl(52 70% 45% / 0.5);
+}
+
+.grid-paper {
+  background-color: hsl(0 0% 100%);
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 31px, hsl(226 60% 55% / 0.08) 31px 32px),
+    repeating-linear-gradient(0deg, transparent 0 31px, hsl(226 60% 55% / 0.08) 31px 32px);
+}
+
 .court-scroll {
   scrollbar-width: thin;
   scrollbar-color: hsl(34 14% 74%) transparent;

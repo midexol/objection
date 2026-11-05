@@ -64,7 +64,7 @@ export function ArgumentCard({
   const [open, setOpen] = useState(false);
   const { shown, done } = useTypewriter(argument.body, fresh);
   const struck = argument.status === "struck";
-  const accent = argument.side === "defense" ? "border-defense/45" : "border-prosecution/45";
+  const accent = argument.side === "defense" ? "border-defense" : "border-prosecution";
 
   useEffect(() => {
     if (done && fresh) onTyped?.();
@@ -78,8 +78,11 @@ export function ArgumentCard({
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}
       className={cn(
-        "relative flex flex-col gap-3 rounded-xl border bg-bench-raised p-4",
-        speaking ? accent : "border-line",
+        "relative flex flex-col gap-3 rounded-2xl border-[1.5px] bg-bench p-4 pl-5 shadow-[0_1px_0_hsl(24_18%_8%/0.08)]",
+        "before:absolute before:inset-y-3 before:left-0 before:w-1 before:rounded-r-full",
+        argument.side === "defense" ? "before:bg-defense" : "before:bg-prosecution",
+        speaking ? accent : "border-brass/20",
+        speaking && (argument.side === "defense" ? "shadow-[4px_4px_0_hsl(226_86%_48%)]" : "shadow-[4px_4px_0_hsl(8_82%_48%)]"),
         struck && "opacity-60",
       )}
     >
@@ -108,7 +111,7 @@ export function ArgumentCard({
 
       <h3
         className={cn(
-          "font-display text-[19px] font-semibold leading-snug tracking-tight",
+          "font-didone text-[22px] font-normal leading-[1.12] tracking-[-0.005em]",
           struck && "line-through decoration-failed decoration-2",
         )}
       >

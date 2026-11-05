@@ -57,7 +57,7 @@ export function ObjectionOverlay({
       {objection && (
         <motion.div
           key={objection.id}
-          className="fixed inset-0 z-40 flex items-center justify-center bg-ink/85 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-40 flex items-center justify-center bg-[hsl(8_82%_48%/0.93)] p-4 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.25 } }}
@@ -69,7 +69,7 @@ export function ObjectionOverlay({
             initial={{ scale: 1.08, y: 10 }}
             animate={{ scale: 1, y: 0, x: [0, -10, 9, -6, 4, 0] }}
             transition={{ duration: 0.5, ease: "easeOut", x: { delay: 0.18, duration: 0.42 } }}
-            className="court-grain relative flex max-h-[calc(100svh-2rem)] w-full max-w-[780px] flex-col gap-4 overflow-y-auto overscroll-contain rounded-[28px] border-2 border-stamp/50 bg-bench p-5 sm:gap-6 shadow-[0_40px_120px_-30px_hsl(var(--primary)/0.45)] sm:p-10"
+            className="court-grain relative flex max-h-[calc(100svh-2rem)] w-full max-w-[780px] flex-col gap-4 overflow-y-auto overscroll-contain rounded-[28px] border-2 border-brass bg-bench p-5 shadow-[8px_8px_0_hsl(52_100%_60%)] sm:gap-6 sm:p-10"
           >
             <div className="brass-edge absolute inset-x-0 top-0 h-px" />
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -88,7 +88,7 @@ export function ObjectionOverlay({
               initial={{ scale: 2.4, opacity: 0, rotate: -6 }}
               animate={{ scale: 1, opacity: 1, rotate: -2 }}
               transition={{ type: "spring", stiffness: 520, damping: 18, mass: 0.9 }}
-              className="origin-left font-serif text-[clamp(60px,13vw,132px)] italic leading-[0.85] tracking-[-0.02em] text-stamp"
+              className="origin-left font-didone text-[clamp(60px,13vw,132px)] font-normal leading-[0.85] tracking-[-0.03em] text-stamp"
             >
               Objection!
             </motion.h2>

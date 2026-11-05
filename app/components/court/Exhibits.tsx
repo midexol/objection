@@ -15,7 +15,9 @@ export function ExhibitCard({
   onOpen,
   onToggleStrike,
   disabled,
+  tilt = 0,
 }: {
+  tilt?: number;
   exhibit: Exhibit;
   citedBy: "defense" | "prosecution" | null;
   onOpen: () => void;
@@ -34,11 +36,12 @@ export function ExhibitCard({
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, y: 12, rotate: -1 }}
-      animate={{ opacity: 1, y: 0, rotate: 0 }}
+      initial={{ opacity: 0, y: 12, rotate: tilt * 2 }}
+      animate={{ opacity: 1, y: 0, rotate: tilt }}
+      whileHover={{ rotate: 0, y: -3 }}
       style={cite}
       className={cn(
-        "exhibit-paper group relative flex min-h-[168px] flex-col gap-2 rounded-xl p-4",
+        "exhibit-paper tape group relative flex min-h-[168px] flex-col gap-2 rounded-xl border-[1.5px] !border-brass p-4 pt-5",
         citedBy && "exhibit-cited",
         struck && "opacity-70 saturate-50",
       )}

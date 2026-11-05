@@ -22,10 +22,10 @@ import { ObjectionOverlay } from "@/components/court/ObjectionOverlay";
 import {
   CounselSeal,
   Eyebrow,
+  Scoreboard,
   SideLabel,
   StatusChip,
   TrialProgress,
-  WeightBar,
 } from "@/components/court/primitives";
 import type { Argument, CaseFile } from "@/components/court/types";
 import { VerdictDialog } from "@/components/court/VerdictDialog";
@@ -174,24 +174,33 @@ function Courtroom({ file }: { file: CaseFile }) {
 
   const draftingSide: Side | null = advance.isPending && nextSlot ? nextSlot.side : null;
 
+  // The room takes the colour of the moment, like the landing film.
+  const room = pending
+    ? "hsl(12 100% 91%)"
+    : ruled
+      ? "hsl(232 100% 94%)"
+      : finished
+        ? "hsl(38 100% 90%)"
+        : "hsl(42 38% 95%)";
+
   return (
-    <div className="court-spotlight court-grain min-h-full">
-      <header className="z-20 border-b border-line bg-ink/85 backdrop-blur-xl md:sticky md:top-0">
-        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-x-6 gap-y-4 px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex min-w-0 flex-1 basis-[520px] items-start gap-3">
+    <div className="court-room min-h-full" style={{ "--room": room } as React.CSSProperties}>
+      <header className="border-b-[1.5px] border-brass bg-highlight">
+        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-x-6 gap-y-4 px-4 py-5 sm:px-6 lg:px-8">
+          <div className="flex min-w-0 flex-[3_1_520px] items-start gap-3">
             <Link
               to="/court"
               aria-label="Back to the docket"
-              className="mt-1 inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-line-strong text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
+              className="mt-1 inline-flex size-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-brass bg-bench transition-colors hover:bg-brass hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-defense"
             >
               <IconArrowLeft className="size-5" aria-hidden="true" />
             </Link>
-            <div className="flex min-w-0 flex-col gap-1">
-              <Eyebrow>
+            <div className="flex min-w-0 flex-col gap-1.5">
+              <Eyebrow className="text-foreground/70">
                 Case {k.id.slice(5, 11).toUpperCase()}
                 {k.rehearsed && <span className="ml-3 text-stamp">Rehearsed sample trial</span>}
               </Eyebrow>
-              <h1 className="font-display text-[clamp(22px,2.6vw,34px)] font-semibold leading-[1.08] tracking-tight">
+              <h1 className="font-didone text-[clamp(26px,3.4vw,46px)] font-normal leading-[1.02] tracking-[-0.01em]">
                 {k.motion}
               </h1>
             </div>
@@ -199,7 +208,7 @@ function Courtroom({ file }: { file: CaseFile }) {
           <div className="flex flex-wrap items-center gap-2.5">
             <div className="mr-1 hidden flex-col items-end gap-1.5 md:flex">
               <TrialProgress turn={k.turn} />
-              <span className="text-[11px] text-muted-foreground">
+              <span className="text-[11px] font-medium text-foreground/70">
                 {ruled
                   ? "Record closed"
                   : finished
@@ -213,7 +222,7 @@ function Courtroom({ file }: { file: CaseFile }) {
               onClick={() => setSound((s) => !s)}
               aria-label={sound ? "Mute gavel" : "Unmute gavel"}
               aria-pressed={sound}
-              className="inline-flex size-11 items-center justify-center rounded-xl border border-line-strong text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
+              className="inline-flex size-11 items-center justify-center rounded-full border-[1.5px] border-brass bg-bench transition-colors hover:bg-brass hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-defense"
             >
               {sound ? <IconVolume className="size-5" aria-hidden="true" /> : <IconVolumeOff className="size-5" aria-hidden="true" />}
             </button>
@@ -240,9 +249,13 @@ function Courtroom({ file }: { file: CaseFile }) {
         </div>
       </header>
 
+      <div className="z-20 md:sticky md:top-0">
+        <Scoreboard defensePct={file.weight.defensePct} />
+      </div>
+
       {needsKey && (
         <div className="mx-auto mt-5 max-w-[1600px] px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brass/40 bg-brass-deep px-5 py-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 pop-sm bg-brass-deep px-5 py-4">
             <p className="text-sm text-brass-strong">
               Live counsel needs a free model key (Groq, Gemini or OpenRouter) in the server environment. You can still build the evidence board now, or watch the rehearsed sample trial.
             </p>
@@ -261,9 +274,13 @@ function Courtroom({ file }: { file: CaseFile }) {
           onTyped={() => setTypingId(null)}
         />
 
-        <section aria-label="Evidence board" className="order-first flex min-w-0 flex-col gap-5 @3xl:col-span-2 @6xl:order-none @6xl:col-span-1">
+        <section
+          aria-label="Evidence board"
+          className="pop grid-paper order-first flex min-w-0 flex-col gap-5 p-5 @3xl:col-span-2 @6xl:order-none @6xl:col-span-1"
+          style={{ "--pop": "hsl(52 100% 60%)" } as React.CSSProperties}
+        >
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 className="font-display text-3xl font-semibold tracking-tight">Evidence board</h2>
+            <h2 className="font-didone text-[34px] font-normal leading-none tracking-[-0.01em]">Evidence board</h2>
             <Eyebrow>
               {file.exhibits.filter((e) => e.status === "admitted").length} admitted
               {file.exhibits.some((e) => e.status !== "admitted") &&
@@ -272,9 +289,10 @@ function Courtroom({ file }: { file: CaseFile }) {
             </Eyebrow>
           </div>
           <div className="grid grid-cols-1 gap-4 @xl:grid-cols-2 @5xl:grid-cols-3 @6xl:grid-cols-2">
-            {file.exhibits.map((e) => (
+            {file.exhibits.map((e, i) => (
               <ExhibitCard
                 key={e.id}
+                tilt={[-1.1, 0.8, -0.5, 1][i % 4]!}
                 exhibit={e}
                 citedBy={citedNow.get(e.letter) ?? null}
                 disabled={ruled || strike.isPending}
@@ -292,7 +310,7 @@ function Courtroom({ file }: { file: CaseFile }) {
               <button
                 type="button"
                 onClick={() => setAddOpen(true)}
-                className="flex min-h-[168px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-line-strong text-muted-foreground transition-colors hover:border-brass/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
+                className="flex min-h-[168px] flex-col items-center justify-center gap-2 rounded-xl border-[1.5px] border-dashed border-brass/50 bg-bench/70 text-foreground/70 transition-colors hover:border-brass hover:bg-brass-deep hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-defense"
               >
                 <IconPlus className="size-6" aria-hidden="true" />
                 <span className="font-medium">
@@ -304,9 +322,9 @@ function Courtroom({ file }: { file: CaseFile }) {
               </button>
             )}
           </div>
-          <div className="rounded-2xl border border-line bg-bench/80 p-5">
-            <WeightBar defensePct={file.weight.defensePct} />
-          </div>
+          <p className="text-xs text-foreground/60">
+            The scoreboard above is scored by rule from standing, verified arguments.
+          </p>
         </section>
 
         <Bench
@@ -396,25 +414,33 @@ function Bench({
     <section
       aria-label={`${SIDE_LABEL[side]} bench`}
       className={cn(
-        "flex min-w-0 flex-col gap-4 rounded-[22px] border bg-bench/90 p-5 @6xl:sticky @6xl:top-[120px] @6xl:max-h-[calc(100vh-140px)]",
-        side === "defense" ? "border-defense/20" : "border-prosecution/20",
+        "pop flex min-w-0 flex-col gap-4 p-5 @6xl:sticky @6xl:top-[96px] @6xl:max-h-[calc(100vh-120px)]",
+        side === "defense" ? "bg-[hsl(226_100%_96%)]" : "bg-[hsl(10_100%_96%)]",
       )}
+      style={{ "--pop": side === "defense" ? "hsl(226 86% 48%)" : "hsl(8 82% 48%)" } as React.CSSProperties}
     >
       <header className="flex items-center gap-3">
-        <CounselSeal side={side} />
-        <div className="flex flex-col">
-          <SideLabel side={side} />
-          <span className="text-[13px] text-muted-foreground">
+        <CounselSeal side={side} size="lg" />
+        <div className="flex flex-col gap-0.5">
+          <span
+            className={cn(
+              "font-didone text-[30px] leading-none tracking-[-0.01em]",
+              side === "defense" ? "text-defense" : "text-prosecution",
+            )}
+          >
+            {SIDE_LABEL[side]}
+          </span>
+          <span className="text-[13px] text-foreground/65">
             {side === "defense" ? "Argues for the motion" : "Argues against the motion"}
           </span>
         </div>
-        <span className="ml-auto text-xs tabular-nums text-muted-foreground">
+        <span className="ml-auto shrink-0 whitespace-nowrap rounded-full border-[1.5px] border-brass bg-bench px-2.5 py-1 text-xs font-semibold tabular-nums">
           {standing} standing
         </span>
       </header>
       <div className="court-scroll -mr-2 flex flex-col gap-3 overflow-y-auto pr-2">
         {args.length === 0 && !drafting && (
-          <p className="rounded-xl border border-dashed border-line-strong px-4 py-6 text-center text-sm text-muted-foreground">
+          <p className="rounded-xl border-[1.5px] border-dashed border-brass/40 bg-bench/60 px-4 py-6 text-center text-sm text-foreground/70">
             {side === "defense" ? "Defense opens the trial." : "Prosecution answers the opening."}
           </p>
         )}
@@ -482,13 +508,12 @@ function JudgeBench({
     <footer className="mx-auto flex max-w-[1600px] flex-wrap items-start gap-5 px-4 pb-10 sm:px-6 lg:px-8">
       <section
         aria-label="Judge's bench"
-        className="relative flex min-w-0 flex-[2_1_620px] flex-col gap-5 overflow-hidden rounded-[22px] border border-brass/35 bg-bench p-5 sm:p-6"
+        className="pop relative flex min-w-0 flex-[2_1_620px] flex-col gap-5 bg-highlight p-5 sm:p-7"
       >
-        <div className="brass-edge absolute inset-x-0 top-0 h-px" />
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-col gap-1">
-            <Eyebrow className="text-stamp">Your bench</Eyebrow>
-            <p className="text-sm text-muted-foreground">
+            <span className="font-didone text-[34px] leading-none tracking-[-0.01em]">Your bench</span>
+            <p className="text-sm font-medium text-foreground/75">
               {ruled
                 ? "The record is closed."
                 : paused
@@ -544,7 +569,7 @@ function JudgeBench({
 
         {!ruled && !finished && (
           <form onSubmit={submit} className="flex flex-col gap-2.5">
-            <label htmlFor="cross" className="text-sm font-medium">
+            <label htmlFor="cross" className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em]">
               Cross-examine
             </label>
             <div className="flex flex-wrap gap-2">
@@ -556,7 +581,7 @@ function JudgeBench({
                 placeholder="Who runs the migration if the backend developer is away?"
                 maxLength={400}
               />
-              <div role="radiogroup" aria-label="Direct question to" className="flex overflow-hidden rounded-xl border border-line-strong">
+              <div role="radiogroup" aria-label="Direct question to" className="flex overflow-hidden rounded-full border-[1.5px] border-brass bg-bench">
                 {(["defense", "prosecution", "both"] as const).map((s) => (
                   <button
                     key={s}
@@ -566,14 +591,14 @@ function JudgeBench({
                     onClick={() => setTo(s)}
                     className={cn(
                       "min-h-11 px-3.5 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brass",
-                      s !== "defense" && "border-l border-line-strong",
+                      s !== "defense" && "border-l-[1.5px] border-brass",
                       to === s
                         ? s === "defense"
-                          ? "bg-defense-deep text-defense"
+                          ? "bg-defense text-white"
                           : s === "prosecution"
-                            ? "bg-prosecution-deep text-prosecution"
-                            : "bg-brass-deep text-brass-strong"
-                        : "text-muted-foreground hover:text-foreground",
+                            ? "bg-prosecution text-white"
+                            : "bg-brass text-white"
+                        : "text-foreground/70 hover:text-foreground",
                     )}
                   >
                     {s === "both" ? "Both" : SIDE_LABEL[s]}
@@ -585,7 +610,7 @@ function JudgeBench({
               </button>
             </div>
             {openQuestions.length > 0 && (
-              <p className="text-xs text-brass-strong">
+              <p className="text-xs font-medium text-foreground">
                 Waiting on {openQuestions.map((q) => SIDE_LABEL[q.side]).join(" and ")} to answer: "{openQuestions[0]!.question}"
               </p>
             )}
@@ -596,7 +621,7 @@ function JudgeBench({
           <button
             type="button"
             onClick={onRestart}
-            className="inline-flex w-fit items-center gap-1.5 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
+            className="inline-flex w-fit items-center gap-1.5 text-xs font-medium text-foreground/70 underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-defense"
           >
             <IconRotate className="size-3.5" aria-hidden="true" /> Restart from opening statements
           </button>
@@ -605,10 +630,10 @@ function JudgeBench({
 
       <section
         aria-label="Court transcript"
-        className="flex min-w-0 flex-[1_1_380px] flex-col gap-3 rounded-[22px] border border-line bg-bench/80 p-5 sm:p-6"
+        className="pop flex min-w-0 flex-[1_1_380px] flex-col gap-3 bg-bench p-5 sm:p-6"
       >
         <div className="flex items-baseline justify-between gap-2">
-          <Eyebrow>Transcript</Eyebrow>
+          <span className="font-didone text-[26px] leading-none">Transcript</span>
           <span className="text-[11px] text-muted-foreground">who, and from which surface</span>
         </div>
         <ol className="court-scroll flex max-h-64 flex-col gap-3 overflow-y-auto font-mono text-[12px]">
@@ -645,7 +670,7 @@ function JudgeBench({
 
 function CourtroomSkeleton() {
   return (
-    <div className="court-spotlight flex h-full flex-col gap-6 p-8">
+    <div className="court-room flex h-full flex-col gap-6 p-8">
       <span className="h-9 w-2/3 animate-pulse rounded-lg bg-bench-raised" />
       <div className="flex flex-1 gap-5">
         <span className="flex-1 animate-pulse rounded-[22px] bg-bench" />

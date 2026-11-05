@@ -63,7 +63,7 @@ export default function FileCaseRoute() {
   }
 
   return (
-    <div className="court-spotlight court-grain min-h-full">
+    <div className="court-room min-h-full">
       <div className="mx-auto flex max-w-[1180px] flex-col gap-10 px-4 pb-20 pt-6 sm:px-6 lg:px-10">
         <nav className="flex items-center justify-between gap-4">
           <Link

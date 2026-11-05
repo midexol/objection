@@ -71,18 +71,15 @@ export function CounselSeal({
   side: Side;
   size?: "sm" | "md" | "lg";
 }) {
-  const s = SIDE_STYLES[side];
   const dims =
     size === "lg" ? "size-14 text-3xl" : size === "sm" ? "size-7 text-base" : "size-10 text-2xl";
   return (
     <span
       aria-hidden="true"
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full font-serif italic ring-1",
+        "inline-flex shrink-0 items-center justify-center rounded-full border-[1.5px] border-brass font-didone text-white",
         dims,
-        s.bg,
-        s.text,
-        s.ring,
+        side === "defense" ? "bg-defense" : "bg-prosecution",
       )}
     >
       {side === "defense" ? "D" : "P"}
@@ -201,23 +198,60 @@ export function TrialProgress({ turn }: { turn: number }) {
           <li key={i} className="flex flex-col items-center gap-1">
             <span
               className={cn(
-                "h-1.5 w-7 rounded-full transition-colors",
+                "h-2.5 w-8 rounded-full border-[1.5px] transition-colors",
                 done
                   ? slot.side === "defense"
-                    ? "bg-defense"
-                    : "bg-prosecution"
+                    ? "border-brass bg-defense"
+                    : "border-brass bg-prosecution"
                   : current
-                    ? "bg-brass"
-                    : "bg-line-strong",
+                    ? "border-brass bg-highlight"
+                    : "border-brass/30 bg-transparent",
               )}
             />
-            {i % 2 === 0 && (
-              <span className="sr-only">{slot.stage}</span>
-            )}
+            <span className="sr-only">
+              {slot.stage}, {SIDE_LABEL[slot.side]}
+            </span>
           </li>
         );
       })}
     </ol>
+  );
+}
+
+/**
+ * The scoreboard: Defense in cobalt, Prosecution in vermilion, and the seam
+ * between them slides as the weight of argument shifts.
+ */
+export function Scoreboard({ defensePct, className }: { defensePct: number; className?: string }) {
+  const prosecutionPct = 100 - defensePct;
+  const left = Math.min(78, Math.max(22, defensePct));
+  return (
+    <div
+      className={cn("flex h-[60px] overflow-hidden border-y-[1.5px] border-brass sm:h-[76px]", className)}
+      role="img"
+      aria-label={`Weight of argument: Defense ${defensePct} percent, Prosecution ${prosecutionPct} percent`}
+    >
+      <motion.div
+        className="flex min-w-0 items-center gap-3 bg-defense px-4 text-white sm:px-8"
+        initial={false}
+        animate={{ width: `${left}%` }}
+        transition={{ type: "spring", stiffness: 110, damping: 20 }}
+      >
+        <span className="font-didone text-[34px] leading-none tabular-nums sm:text-[52px]">{defensePct}</span>
+        <span className="flex flex-col font-mono text-[10px] font-medium uppercase leading-tight tracking-[0.16em] sm:text-[11px]">
+          <span>Defense</span>
+          <span className="hidden opacity-80 sm:inline">for the motion</span>
+        </span>
+      </motion.div>
+      <div className="w-[1.5px] shrink-0 bg-brass" />
+      <div className="flex min-w-0 flex-1 items-center justify-end gap-3 bg-prosecution px-4 text-white sm:px-8">
+        <span className="flex flex-col items-end font-mono text-[10px] font-medium uppercase leading-tight tracking-[0.16em] sm:text-[11px]">
+          <span>Prosecution</span>
+          <span className="hidden opacity-80 sm:inline">against it</span>
+        </span>
+        <span className="font-didone text-[34px] leading-none tabular-nums sm:text-[52px]">{prosecutionPct}</span>
+      </div>
+    </div>
   );
 }
 
@@ -239,16 +273,18 @@ export function statusLabel(status: string): string {
 export function StatusChip({ status, paused = false }: { status: string; paused?: boolean }) {
   const label = paused ? "Court paused" : statusLabel(status);
   const tone = paused
-    ? "border-brass/60 text-brass-strong bg-brass-deep"
+    ? "bg-[hsl(12_100%_84%)]"
     : status === "ruled"
-      ? "border-line-strong text-foreground"
+      ? "bg-[hsl(232_100%_88%)]"
       : status === "deliberation"
-        ? "border-brass/50 text-brass-strong"
-        : "border-line-strong text-muted-foreground";
+        ? "bg-[hsl(38_100%_78%)]"
+        : status === "in_session"
+          ? "bg-[hsl(152_72%_80%)]"
+          : "bg-[hsl(198_100%_84%)]";
   return (
     <span
       className={cn(
-        "inline-flex h-8 items-center rounded-full border px-3 text-xs font-medium",
+        "inline-flex h-8 items-center rounded-full border-[1.5px] border-brass px-3 text-xs font-semibold text-foreground",
         tone,
       )}
     >

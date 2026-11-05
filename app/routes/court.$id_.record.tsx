@@ -87,7 +87,7 @@ export default function RecordRoute() {
   }
 
   return (
-    <div className="court-spotlight court-grain min-h-full">
+    <div className="court-room min-h-full">
       <div className="mx-auto flex max-w-[1280px] flex-col gap-8 px-4 pb-20 pt-6 sm:px-6 lg:px-10">
         <nav className="flex items-center justify-between gap-4">
           <Link
@@ -104,7 +104,8 @@ export default function RecordRoute() {
             initial={{ opacity: 0, y: 24, rotate: -0.6 }}
             animate={{ opacity: 1, y: 0, rotate: 0 }}
             transition={{ duration: 0.6, ease: [0.2, 0.7, 0.2, 1] }}
-            className="exhibit-paper flex min-w-0 flex-[999_1_640px] flex-col gap-8 rounded-[28px] p-7 sm:p-12"
+            className="exhibit-paper pop flex min-w-0 flex-[999_1_640px] flex-col gap-8 !border-brass p-7 sm:p-12"
+            style={{ "--pop": "hsl(232 100% 89%)" } as unknown as Record<string, string>}
           >
             <div className="flex flex-wrap justify-between gap-2 font-mono text-[11px] font-medium tracking-[0.14em] text-paper-muted">
               <span>DECISION RECORD, CASE {k.id.slice(5, 11).toUpperCase()}</span>
@@ -113,14 +114,14 @@ export default function RecordRoute() {
 
             <div className="flex flex-col gap-3">
               <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-paper-muted">THE MOTION</span>
-              <h1 className="font-display text-[clamp(30px,4vw,48px)] font-bold leading-[1.02] tracking-[-0.03em]">{k.motion}</h1>
+              <h1 className="font-didone text-[clamp(32px,4.4vw,58px)] font-normal leading-[1.02] tracking-[-0.01em]">{k.motion}</h1>
             </div>
 
-            <div className="flex flex-col gap-3 rounded-2xl bg-paper-ink p-6 text-paper sm:p-8">
-              <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-highlight">
+            <div className="pop-sm flex flex-col gap-3 bg-highlight p-6 text-paper-ink sm:p-8">
+              <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-paper-ink/70">
                 RULING, {DECISION_LABEL[decision].toUpperCase()}
               </span>
-              <p className="font-serif text-[clamp(24px,2.8vw,34px)] leading-[1.2]">{k.ruling}</p>
+              <p className="font-didone text-[clamp(26px,3vw,40px)] leading-[1.12]">{k.ruling}</p>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -166,8 +167,8 @@ export default function RecordRoute() {
           </motion.article>
 
           <aside className="flex min-w-0 flex-[1_1_300px] flex-col gap-4 lg:sticky lg:top-6">
-            <section className="flex flex-col gap-3 rounded-[24px] border border-line bg-bench/90 p-6">
-              <h2 className="font-display text-xl font-semibold tracking-tight">Take it with you</h2>
+            <section className="flex flex-col gap-3 pop bg-bench p-6">
+              <h2 className="font-didone text-[28px] leading-none">Take it with you</h2>
               <p className="text-sm text-muted-foreground">Exports as a Markdown decision record (ADR) your team can keep in the repo.</p>
               <button type="button" className={primaryButton} onClick={() => void exportRecord("download")}>
                 <IconDownload className="size-4" aria-hidden="true" /> Download .md
@@ -180,7 +181,7 @@ export default function RecordRoute() {
               </Link>
             </section>
 
-            <section className="flex flex-col gap-4 rounded-[24px] border border-line bg-bench/90 p-6">
+            <section className="flex flex-col gap-4 pop bg-bench p-6">
               <Eyebrow>The trial in numbers</Eyebrow>
               <dl className="grid grid-cols-2 gap-4">
                 {[
@@ -202,7 +203,7 @@ export default function RecordRoute() {
             </section>
 
             {file.objections.length > 0 && (
-              <section className="flex flex-col gap-2 rounded-[24px] border border-line bg-bench/90 p-6 text-sm">
+              <section className="flex flex-col gap-2 pop bg-bench p-6 text-sm">
                 <Eyebrow>Objections on the record</Eyebrow>
                 <ul className="flex flex-col gap-2">
                   {file.objections.map((o) => (

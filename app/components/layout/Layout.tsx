@@ -121,6 +121,8 @@ function LayoutShell({ children }: LayoutProps) {
     try {
       const stored = window.localStorage.getItem(SIDEBAR_COLLAPSE_KEY);
       if (stored !== null) setSidebarCollapsed(stored === "1");
+      // First visit: give the courtroom the full width. The rail stays one tap away.
+      else if (window.location.pathname.startsWith("/court")) setSidebarCollapsed(true);
     } catch {
       // Ignore storage access errors; the default collapsed state still works.
     }
