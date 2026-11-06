@@ -1,8 +1,8 @@
 {
-  "name": "app",
-  "displayName": "App",
+  "name": "objection",
+  "displayName": "Objection!",
   "private": true,
-  "description": "Workspace app for App.",
+  "description": "A decision court: two AI lawyers argue your yes/no decision from your own evidence, every quote is checked, and you are the judge.",
   "type": "module",
   "scripts": {
     "migrate:production": "tsx scripts/migrate-production.ts",
@@ -126,5 +126,11 @@
       "coreVersion": "0.223.0",
       "shape": "standalone"
     }
-  }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/midexol/objection.git"
+  },
+  "homepage": "https://objection1.vercel.app"
 }

@@ -1,38 +1,24 @@
 # Visual Design Contract
 
-Chat is a quiet, full-canvas conversation workbench. AgentKit owns the
-conversation primitives; the template owns the surrounding navigation and
-workspace chrome.
+Objection! is a bright, loud-on-purpose decision court. The ground changes colour with the state of the trial, and everything sits on a graph-paper grid with hard outlines and hard shadows, like pieces of paper on a desk.
 
 ## Product mode
 
 - Mode: `operate`
-- Audience and cadence: frequent users managing many ongoing agent threads.
-- Primary workflow: begin, resume, pin, and organize conversations without
-  leaving the chat canvas.
+- Audience: engineering teams and individuals deciding something with real stakes.
+- Primary workflow: add evidence, hear both lawyers, rule on objections, give a verdict.
 
 ## Visual direction
 
-- Direction name: Quiet conversation library
-- Palette family: neutral ink and semantic surfaces; active rows use the
-  existing sidebar accent rather than a separate branded color.
-- Type treatment: dense sans-serif labels with regular-weight conversation
-  titles and restrained section labels.
-- Composition: a persistent conversation library beside a generous chat
-  canvas. New chat is the primary rail action, followed by Pinned and Recents.
-  Account, workspace, settings, and sign-out controls disclose from one footer
-  row instead of competing in the rail.
-- Shape language: borderless lists, soft selected rows, quiet corners, and
-  compact icon controls.
-- Anti-references: icon-only navigation as the default state, floating chips,
-  duplicated settings links, timestamps competing with thread titles, and
-  placeholder destinations that the app does not implement.
+- **Palette:** bone ground, ink black, highlighter yellow, cobalt for Defense, vermilion for Prosecution. Each stage of the landing film and the courtroom has its own pastel ground (coral while an objection is pending, periwinkle once ruled, apricot when finished).
+- **Type:** Gloock for display titles, Schibsted Grotesk for interface text, Newsreader italic for quotes, Geist Mono for small labels.
+- **Shape language:** 1.5px ink outlines with hard offset shadows (`.pop`, `.pop-sm`), taped evidence cards (`.tape`), graph paper (`.grid-paper`).
+- **Motion:** one scroll-driven film on the landing page; a gavel-strike takeover for objections; a split bar that shows who is ahead.
+- **Wording:** plain language only. Say "evidence", "lawyers", "thrown out", "agree/disagree". No legal or developer jargon in the interface.
+- **Anti-references:** dark themes, gold accents, decorative dots, icon-only navigation, legal-cosplay vocabulary.
 
-## Guardrails
+## Accessibility
 
-- Preserve the scaffold's semantic tokens and shared component seams.
-- Keep domain pages distinct from full-page chat and use the AgentSidebar for
-  contextual AI.
-- Compare sibling apps before reusing their palette or composition.
-- Keep pinning, rename, archive, and routing wired to the shared chat thread
-  model; the sidebar is a presentation layer, not a second history store.
+- Every colour pairing keeps text at AA contrast or better.
+- Dialogs trap focus and put it on the first action; the objection takeover announces itself as a dialog.
+- No horizontal scroll at 390px wide; tap targets are at least 40px.

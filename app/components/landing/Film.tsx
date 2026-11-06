@@ -257,7 +257,7 @@ function Hero({ p, enterHref, sampleHref }: { p: number; enterHref: string; samp
               href={enterHref}
               className="inline-flex min-h-12 items-center rounded-full border border-foreground/20 px-7 text-[15px] font-semibold text-foreground transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass"
             >
-              File a case
+              New case
             </a>
           </div>
         </div>

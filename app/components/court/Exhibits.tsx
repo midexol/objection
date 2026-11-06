@@ -53,7 +53,7 @@ export function ExhibitCard({
             Being used by {citedBy}
           </span>
         ) : exhibit.addedVia === "sample" ? (
-          <span className="text-paper-muted">sample exhibit</span>
+          <span className="text-paper-muted">demo evidence</span>
         ) : exhibit.addedBy !== "judge" || exhibit.addedVia !== "ui" ? (
           <span className="text-paper-muted">
             {exhibit.addedBy} via {exhibit.addedVia}
@@ -242,7 +242,7 @@ export function AddExhibitDialog({
         if (!o) reset();
       }}
       title="Add evidence"
-      description="Counsel can only quote what is on the board. Paste text or load a text file."
+      description="The lawyers can only quote what you add here. Paste text or load a text file."
     >
       {suggestion && !content && (
         <button

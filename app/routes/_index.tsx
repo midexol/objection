@@ -92,7 +92,7 @@ export default function LandingRoute() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a href={enter("/court/new")} className={pillGold}>
-              File a case
+              New case
             </a>
             <a href={enter("/court?sample=1")} className={pillGhost}>
               Watch a demo trial

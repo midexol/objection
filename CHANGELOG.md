@@ -1,29 +1,18 @@
 # Changelog
 
-All notable user-facing changes to this app are documented here.
+## 2026-11-06
 
-## 2026-10-10
+- Plain-language pass across the app: step guide, "My cases" navigation, simpler button and dialog wording.
+- Added tests for quote checking and scoring.
+- Added screenshots and a full README.
 
-### Fixed
+## 2026-11-05
 
-- Large prompts with full context remain available to retry when sending fails.
+- Guest entry: visitors enter without signing up.
+- Bright redesign of the landing film, docket, courtroom, objection takeover and decision page.
+- Mobile pass; Vercel deployment config.
 
-## 2026-09-30
+## 2026-10-28 to 2026-11-04
 
-### Improved
-
-- Chat uses a compact + menu with context submenus, keeps task, automation, and skill actions at the root, and omits Generate Image.
-
-## 2026-09-27
-
-### Fixed
-
-- Chat retries the original request with its attachments after model setup.
-
-## 2026-08-27
-
-### Fixed
-
-- Chat includes the runtime packages needed for provider keys after deployment.
-
-For the full list of updates, see the [changelog folder](./changelog/).
+- First build of the court: filing cases, evidence, six-turn trial, quote checking, objections, surprise twist, questions, verdict and decision export.
+- Started from the Agent-Native Chat template.
