@@ -4,6 +4,7 @@
 
 **Live:** [objection1.vercel.app](https://objection1.vercel.app) (enter as a guest, no sign-up)
 Built on [Agent-Native](https://github.com/BuilderIO/agent-native) for the Builder.io Agent-Native Hackathon.
+Check out the demo [clips recording](https://clips.agent-native.com/share/0bPiQSyhLS2T?ref=clip_share&via=V4pThirEhr9kBpyakQ8HRDOCmKc3mKO8)
 
 ![The landing page](docs/screenshots/landing.jpg)
 
