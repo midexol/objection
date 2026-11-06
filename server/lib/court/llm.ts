@@ -24,13 +24,19 @@ function providers(): Provider[] {
   const list: Provider[] = [];
   const groqKey = env("GROQ_API_KEY");
   if (groqKey) {
-    list.push({
-      name: "groq",
-      model: () =>
-        createGroq({ apiKey: groqKey })(
-          env("COUNSEL_GROQ_MODEL") ?? "llama-3.3-70b-versatile",
-        ),
-    });
+    // Groq retires and renames models; try the configured one, then known-good ones.
+    const groqModels = [
+      env("COUNSEL_GROQ_MODEL"),
+      "llama-3.3-70b-versatile",
+      "openai/gpt-oss-120b",
+      "llama-3.1-8b-instant",
+    ].filter((m, i, all): m is string => !!m && all.indexOf(m) === i);
+    for (const modelId of groqModels) {
+      list.push({
+        name: "groq",
+        model: () => createGroq({ apiKey: groqKey })(modelId),
+      });
+    }
   }
   const geminiKey = env("GEMINI_API_KEY") ?? env("GOOGLE_GENERATIVE_AI_API_KEY");
   if (geminiKey) {
@@ -56,7 +62,7 @@ function providers(): Provider[] {
 }
 
 export function counselAvailable(): { live: boolean; providers: string[] } {
-  const names = providers().map((p) => p.name);
+  const names = [...new Set(providers().map((p) => p.name))];
   return { live: names.length > 0, providers: names };
 }
 
@@ -96,7 +102,7 @@ export async function completeJson(system: string, prompt: string): Promise<{
         const message = error instanceof Error ? error.message : String(error);
         errors.push(`${p.name}: ${message.slice(0, 160)}`);
         // A rate limit or auth failure will not fix itself on retry; move on.
-        if (/429|rate|quota|401|403|key/i.test(message)) break;
+        if (/429|rate|quota|401|403|key|does not exist|not found|decommission/i.test(message)) break;
       }
     }
   }
